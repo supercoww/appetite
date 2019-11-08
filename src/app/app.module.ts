@@ -6,8 +6,8 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TopBarComponent } from './top-bar/top-bar.component';
 import { HomeComponent } from './pages/home/home.component';
-import { SearchComponent } from './search/search.component';
 import { ResultsComponent } from './pages/home/results/results.component';
+import { SearchComponent } from './pages/home/search/search.component';
 
 @NgModule({
 	declarations: [AppComponent, TopBarComponent, HomeComponent, SearchComponent, ResultsComponent],
