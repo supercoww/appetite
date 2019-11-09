@@ -1,5 +1,9 @@
 <div>
-	<div *ngIf="searchResults; else empty">{{ searchResults | json }}</div>
+	<div *ngIf="searchResults; else empty">
+		<mat-card matRipple class="result-card" *ngFor="let result of searchResults">
+			{{ result | json }}
+		</mat-card>
+	</div>
 </div>
 
 <ng-template #empty>
