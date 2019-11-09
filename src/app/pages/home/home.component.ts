@@ -6,7 +6,8 @@ import { Component, OnInit } from '@angular/core';
 	styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-	searchString;
+	searchString: string;
+	searchResults;
 
 	constructor() {}
 
@@ -14,6 +15,5 @@ export class HomeComponent implements OnInit {
 
 	onSearch($event) {
 		this.searchString = $event;
-		console.log(this.searchString);
 	}
 }
