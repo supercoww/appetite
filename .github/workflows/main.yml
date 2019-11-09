@@ -20,5 +20,5 @@ jobs:
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           BASE_BRANCH: master
           DEPLOY_BRANCH: gh-pages
-          BUILD_SCRIPT: npm run build:prod
+          BUILD_SCRIPT: npm i && npm run build:prod
           FOLDER: dist/stack-search
