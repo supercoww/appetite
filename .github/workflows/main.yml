@@ -1,0 +1,24 @@
+name: deploy
+
+on:
+  push:
+    branches: 
+      - master
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@master
+    - name: Github Build & Deploy Action
+      uses: jeoy/github-deploy-actions@v1.0.1
+      env:
+          COMMIT_EMAIL: ambar.ytl@gmail.com
+          COMMIT_NAME: deploybot
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          BASE_BRANCH: master
+          DEPLOY_BRANCH: gh-pages
+          BUILD_SCRIPT: npm && npm run build:prod
+          FOLDER: dist/stack-search
