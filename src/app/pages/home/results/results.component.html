@@ -1,1 +1,10 @@
-<div *ngIf="searchResults">{{ searchResults | json }}</div>
+<div>
+	<div *ngIf="searchResults; else empty">{{ searchResults | json }}</div>
+</div>
+
+<ng-template #empty>
+	<div class="center">
+		<mat-icon class="large">search</mat-icon> <br />
+		Search to see results
+	</div>
+</ng-template>

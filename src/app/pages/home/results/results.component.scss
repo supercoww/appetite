@@ -1,0 +1,14 @@
+.large {
+	font-size: 100px;
+	width: fit-content;
+	height: fit-content;
+}
+
+.center {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	text-align: center;
+	color: #bdbdbd;
+}
