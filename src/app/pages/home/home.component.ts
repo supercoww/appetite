@@ -15,5 +15,15 @@ export class HomeComponent implements OnInit {
 
 	onSearch($event) {
 		this.searchString = $event;
+		this.searchResults = this.getSearchResults(this.searchString);
+	}
+
+	// TODO: replace demo results with actual
+	getSearchResults(searchString: string): any[] {
+		return [
+			{ que: 'Question', ans: 'Answer' },
+			{ que: 'Question', ans: 'Answer' },
+			{ que: 'Question', ans: 'Answer' }
+		];
 	}
 }
