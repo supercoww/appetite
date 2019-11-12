@@ -1,5 +1,4 @@
 import { Injectable, Query } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
 
 @Injectable({
 	providedIn: 'root'
@@ -24,37 +23,46 @@ export class DataServiceService {
 */
 
 	//Configuration
-	sitenames = ['stackoverflow','math',]
+	sitenames = ['stackoverflow','math','physics','askubuntu']
 	availablefilters=['view_count','answer_count','score','activity','is_answered','creationdate']
 	availablesorts=['activitydate','votes','view_count'];
 	apiurl = "https://api.stackexchange.com/2.2/search/advanced?";
 	defaultsort="view_count";
-
+		query={};
 
 	results = []
 	filteredresults=[]
 	
 
-	constructor(private http: HttpClient) {
+	constructor() {
 	
 		
 	}
+	utility(suf,i,query)
+	{
+		if(i>=this.sitenames.length)
+		{
+			this.filterresult(query);
+			this.sortcombineresult(query);
+			console.log(this.filteredresults);
+			console.log(this.results);
+			return;
 
-
+		}
+		fetch(suf+"&site="+this.sitenames[i]).then(response => response.json()).then(res => {
+			this.results=this.results.concat(res.items);
+			this.utility(suf,i+1,query);
+			return;
+		});
+	}
 	fetchresults(query) {
 		
 		//=this.http.get('?order=desc&sort=activity&q='+query);
-		var suf=this.apiurl+this.parsequery;
+		this.query=query;
+		var suf=this.apiurl+this.parsequery(query);
 		console.log(suf);
-		this.sitenames.forEach(site=>{
-			fetch(suf+"&site="+site).then(response => response.json()).then(res => {
-				this.results=this.results.concat(res.items);
-			});
-		}
-
-		);
-	this.filterresult(query);
-	this.sortcombineresult(query);
+		this.utility(suf,0,query);
+	
 
 	}
 	
@@ -72,49 +80,57 @@ export class DataServiceService {
 	*/
 	filterresult(query)
 	{
+		if(!query.filters)
+		{
+			this.filteredresults=this.results;
+			return;
+		}
+		else if(query.filters.length==0)
+		{
+			this.filteredresults=this.results;
+			return;
+		}
 		this.results.forEach(ele=>
 			{
-				query.filters.forEach(element => {
-					var name=element.name;
-					if(element.min)
-					{
-						if(ele.name >= element.min)
+					query.filters.forEach(element => {
+					
+						var name=element.filtername;
+						console.log(name,ele.name);
+						//console.log(element.filtername,element.min,element.max,ele.name);
+						if(element.min)
 						{
-							if(element.max)
+							if(ele[name]>= element.min)
 							{
-								if(ele.name <= element.max)
+								if(element.max)
 								{
-									this.filteredresults.push(ele);
+									if(ele[name] <= element.max)
+									{
+										this.filteredresults.push(ele);
+									}
+								
 								}
-							
+								else this.filteredresults.push(ele);
 							}
-							else this.filteredresults.push(ele);
 						}
-					}
 
 
-					else if(element.max)
-					{
-						if(ele.name <= element.max)
+						else if(element.max)
 						{
-							
-							this.filteredresults.push(ele);
+							if(ele[name] <= element.max)
+							{
+								
+								this.filteredresults.push(ele);
+							}
 						}
-					}
+						else this.filteredresults.push(ele);
 
 
-
-
-
-
-
-
-
-
-
+					});
 				});
-			})
-	}
+				
+
+	
+}
 	sortcombineresult(query)
 	{
 		var sortval;
@@ -147,7 +163,7 @@ export class DataServiceService {
 	parsequery(query)
 	{
 		var suf="q="+query.text;
-		suf=suf+"&sort="+this.defaultsort;
+		suf=suf+"&sort=relevance";
 		return suf;
 
 	}
