@@ -1,1 +1,14 @@
-<p>results works!</p>
+<div>
+	<div *ngIf="searchResults; else empty">
+		<mat-card matRipple class="result-card" *ngFor="let result of searchResults">
+			{{ result | json }}
+		</mat-card>
+	</div>
+</div>
+
+<ng-template #empty>
+	<div class="center">
+		<mat-icon class="large">search</mat-icon> <br />
+		Search to see results
+	</div>
+</ng-template>

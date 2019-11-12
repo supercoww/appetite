@@ -1,0 +1,19 @@
+.large {
+	font-size: 100px;
+	width: fit-content;
+	height: fit-content;
+}
+
+.center {
+	position: absolute;
+	top: 60vh;
+	left: 50vw;
+	transform: translate(-50%, -50%);
+	text-align: center;
+	color: #bdbdbd;
+	user-select: none;
+}
+
+.result-card {
+	margin-top: 10px;
+}

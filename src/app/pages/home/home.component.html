@@ -1,2 +1,2 @@
-<app-search></app-search>
-<app-results></app-results>
+<app-search (searchEvent)="onSearch($event)"></app-search>
+<app-results [searchResults]="searchResults"></app-results>
