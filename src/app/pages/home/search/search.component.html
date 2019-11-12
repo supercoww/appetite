@@ -1,7 +1,13 @@
 <form>
 	<mat-form-field appearance="outline" class="search-box">
 		<mat-label>Search</mat-label>
-		<input type="search" matInput [(ngModel)]="searchString" name="search-string" />
+		<input
+			type="search"
+			matInput
+			[(ngModel)]="searchString"
+			name="search-string"
+			#searchInput="matInput"
+		/>
 		<button mat-icon-button matSuffix [disabled]="!searchString" (click)="triggerSearch()">
 			<mat-icon matSuffix>search</mat-icon>
 		</button>
@@ -9,7 +15,7 @@
 </form>
 
 <div class="button-container">
-	<button mat-button>
+	<button mat-button (click)="speechRecognition.start()">
 		<mat-icon matSuffix>mic</mat-icon>
 		Voice
 	</button>
