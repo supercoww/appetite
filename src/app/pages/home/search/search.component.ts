@@ -25,9 +25,9 @@ export class SearchComponent implements OnInit {
 
 	imageUpload(){
 		console.log("imageupload");
-		var fileUp = document.getElementById("realImageUpload");
+		var fileUp = <HTMLInputElement>(document.getElementById("realImageUpload"));
 		console.log(fileUp.files);
-		var fileOb = fileUp.files;
+		var fileOb = fileUp.files[0];
 
 		const worker = createWorker({
 			logger: m => console.log(m), // Add logger here
@@ -38,7 +38,7 @@ export class SearchComponent implements OnInit {
 				await worker.loadLanguage('eng+chi_tra');
 				await worker.initialize('eng+chi_tra');
 				
-				const { data: { text } } = await worker.recognize(fileOb[0]);
+				const { data: { text } } = await worker.recognize(fileOb);
 
 				// TODO :- SPINNER 
 				var imgText=this.formatQuery(text)
