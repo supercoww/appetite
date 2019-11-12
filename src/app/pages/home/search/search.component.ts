@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { createWorker } from 'tesseract.js';
+import * as Tesseract from 'tesseract.js';
 
 @Component({
 	selector: 'app-search',
@@ -29,23 +29,22 @@ export class SearchComponent implements OnInit {
 		console.log(fileUp.files);
 		var fileOb = fileUp.files[0];
 
-		const worker = createWorker({
-			logger: m => console.log(m), // Add logger here
-		  });
-		  
-		  (async () => {
-				await worker.load();
-				await worker.loadLanguage('eng+chi_tra');
-				await worker.initialize('eng+chi_tra');
-				
-				const { data: { text } } = await worker.recognize(fileOb);
-
-				// TODO :- SPINNER 
-				var imgText=this.formatQuery(text)
-				console.log(imgText);
-				this.searchString=imgText;
-				await worker.terminate();
-		  })();
+		Tesseract.recognize(
+			fileOb,'eng',
+			{ 
+				logger: m => {
+					console.log(m);
+					var progess=m['progress']*100 + "%";
+					var currProcess = m['status'] ;
+					// TODO :- progress bar using above vars instead of spinner
+					console.log(currProcess,progess);
+				}
+			}
+		  ).then(({ data: { text } }) => {
+			  var imgQuery = this.formatQuery(text);
+			  this.searchString = imgQuery;
+			  console.log(imgQuery);
+		  })
 		}
 
 		formatQuery(text)
