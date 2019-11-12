@@ -60,9 +60,9 @@ export class SearchComponent implements OnInit {
 
 	imageUpload() {
 		console.log('imageupload');
-		const fileUp = document.getElementById('realImageUpload');
-		console.log((fileUp as HTMLInputElement).files);
-		const fileOb = (fileUp as HTMLInputElement).files;
+		var fileUp = <HTMLInputElement>document.getElementById('realImageUpload');
+		console.log(fileUp.files);
+		var fileOb = fileUp.files[0];
 
 		const worker = createWorker({
 			logger: m => console.log(m) // Add logger here
@@ -75,10 +75,10 @@ export class SearchComponent implements OnInit {
 
 			const {
 				data: { text }
-			} = await worker.recognize(fileOb[0]);
+			} = await worker.recognize(fileOb);
 
 			// TODO :- SPINNER
-			const imgText = this.formatQuery(text);
+			var imgText = this.formatQuery(text);
 			console.log(imgText);
 			this.searchString = imgText;
 			await worker.terminate();
