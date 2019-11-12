@@ -6,7 +6,7 @@ interface IWindow extends Window {
 	webkitSpeechRecognition: any;
 }
 
-const { webkitSpeechRecognition }: IWindow = window as IWindow;
+const { webkitSpeechRecognition }: IWindow = (window as any) as IWindow;
 
 @Component({
 	selector: 'app-search',
@@ -60,9 +60,9 @@ export class SearchComponent implements OnInit {
 
 	imageUpload() {
 		console.log('imageupload');
-		var fileUp = <HTMLInputElement>document.getElementById('realImageUpload');
+		const fileUp = document.getElementById('realImageUpload') as HTMLInputElement;
 		console.log(fileUp.files);
-		var fileOb = fileUp.files[0];
+		const fileOb = fileUp.files[0];
 
 		const worker = createWorker({
 			logger: m => console.log(m) // Add logger here
@@ -78,7 +78,7 @@ export class SearchComponent implements OnInit {
 			} = await worker.recognize(fileOb);
 
 			// TODO :- SPINNER
-			var imgText = this.formatQuery(text);
+			const imgText = this.formatQuery(text);
 			console.log(imgText);
 			this.searchString = imgText;
 			await worker.terminate();
