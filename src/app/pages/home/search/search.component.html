@@ -13,8 +13,10 @@
 		<mat-icon matSuffix>mic</mat-icon>
 		Voice
 	</button>
-	<button mat-button>
+	<button mat-button (click)= clickRealImgBtn() >
 		<mat-icon matSuffix>camera_alt</mat-icon>
 		Camera
 	</button>
+	<input type="file" name="image" id="realImageUpload" (input)=imageUpload() hidden>
 </div>
+
