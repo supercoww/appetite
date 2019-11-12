@@ -17,3 +17,28 @@
 .result-card {
 	margin-top: 10px;
 }
+
+.date {
+	font-size: 14px;
+	flex-grow: 1;
+	text-align: right;
+	color: rgba(0, 0, 0, 0.54);
+}
+
+.numbers {
+	display: flex;
+
+	div {
+		flex-grow: 1;
+		text-align: center;
+
+		.num {
+			font-size: large;
+			font-weight: bold;
+		}
+	}
+}
+
+.card-link {
+	text-decoration: none;
+}

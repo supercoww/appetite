@@ -1,8 +1,48 @@
-<div>
-	<div *ngIf="searchResults; else empty">
-		<mat-card matRipple class="result-card" *ngFor="let result of searchResults">
-			{{ result | json }}
-		</mat-card>
+<!-- TODO: Display:
+	- score
+	- answer_count
+	- view_count
+	- owner.display_name
+	- owner.profile_image
+	- link
+	- creation_date
+	- last_activity_date
+	- title
+	- is_answered
+-->
+<div *ngIf="searchResults; else empty">
+	<div *ngFor="let result of searchResults">
+		<a [href]="result.link" target="_blank" rel="noopener" class="card-link">
+			<mat-card matRipple class="result-card">
+				<mat-card-header>
+					<div mat-card-avatar>
+						<img [src]="result.owner.profile_image" />
+					</div>
+					<mat-card-title>{{ result.title }}</mat-card-title>
+					<mat-card-subtitle
+						>{{ result.owner.display_name }}<br />
+						Last Activity: {{ result.last_activity_date | date }}
+					</mat-card-subtitle>
+					<div class="date">{{ result.creation_date | date }}</div>
+				</mat-card-header>
+				<mat-card-content>
+					<div class="numbers">
+						<div>
+							<span class="num">{{ result.score }}</span> <br />
+							Score
+						</div>
+						<div>
+							<span class="num">{{ result.view_count }}</span> <br />
+							Views
+						</div>
+						<div>
+							<span class="num">{{ result.answer_count }}</span> <br />
+							Answers
+						</div>
+					</div>
+				</mat-card-content>
+			</mat-card>
+		</a>
 	</div>
 </div>
 
