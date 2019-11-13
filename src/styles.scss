@@ -26,9 +26,17 @@ $stack-search-theme-dark: mat-dark-theme($stack-search-primary, $stack-search-ac
 // that you are using.
 @media screen and (prefers-color-scheme: light), screen and (prefers-color-scheme: no-preference) {
 	@include angular-material-theme($stack-search-theme);
+
+	.date {
+		color: rgba(0, 0, 0, 0.54);
+	}
 }
 @media screen and (prefers-color-scheme: dark) {
 	@include angular-material-theme($stack-search-theme-dark);
+
+	.date {
+		color: white;
+	}
 }
 /* You can add global styles to this file, and also import other style files */
 
