@@ -15,6 +15,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { FiltersComponent } from './pages/home/filters/filters.component';
 import { ImageCropperModule } from 'ngx-image-cropper';
 
+import { AngularCropperjsModule } from 'angular-cropperjs';
+
 @NgModule({
 	declarations: [
 		AppComponent,
@@ -31,7 +33,8 @@ import { ImageCropperModule } from 'ngx-image-cropper';
 		MaterialModule,
 		FormsModule,
 		ImageCropperModule,
-		HttpClientModule
+		HttpClientModule,
+		AngularCropperjsModule
 	],
 
 	providers: [],

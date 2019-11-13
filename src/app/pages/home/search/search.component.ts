@@ -4,6 +4,7 @@ import { MatInput } from '@angular/material/input';
 import * as Tesseract from 'tesseract.js';
 import { ImageCroppedEvent, ImageCropperComponent } from 'ngx-image-cropper';
 
+import { CropperComponent } from 'angular-cropperjs';
 
 interface IWindow extends Window {
 	webkitSpeechRecognition: any;
@@ -19,9 +20,8 @@ const { webkitSpeechRecognition }: IWindow = (window as any) as IWindow;
 export class SearchComponent implements OnInit {
 	@ViewChild('searchInput', { static: true }) searchInput: MatInput;
 	// tslint:disable-next-line: variable-name
-
-	imageChangedEvent: any = '';
-	croppedImage: any = '';
+	//imageChangedEvent: any = '';
+	//croppedImage: any = '';
 	public imgUrl:any='';
 	public cropperHidden = true;
 
@@ -70,10 +70,6 @@ export class SearchComponent implements OnInit {
 	imageUpload() {
 		this.cropperHidden=true;
 		alert('imageupload');
-		//const fileUp = document.getElementById('realImageUpload') as HTMLInputElement;
-		//console.log(fileUp.files);
-		//const fileOb = fileUp.files[0];
-		//alert(fileOb.name);
 		Tesseract.recognize(
 			this.imgUrl,'eng',
 			{ 
@@ -97,7 +93,66 @@ export class SearchComponent implements OnInit {
 		{
 			return text.replace(/(\r\n|\n|\r)/gm," "); // replacing newlines with space
 		}
+		//////// Cropper code...
+		@ViewChild('angularCropper',{static:true}) public angularCropper: CropperComponent;
+		imgCrp = null;
+		config = {
+			dragMode : 'crop',
+			autoCrop: false,
+			background : true,
+			movable: true,
+			rotatable : true,
+			scalable: true,
+			zoomable: false,
+			viewMode: 1,
+			checkImageOrigin : true,
+			cropmove:this.cropMoved.bind(this),
+			checkCrossOrigin: true
+		};
+	
+		previewURL: any;
+		imgPreview() {
+			this.cropperHidden = false;
+			const fileUp = document.getElementById('realImageUpload') as HTMLInputElement;
+			const fileOb = fileUp.files[0];
+			if (fileUp.files.length === 0)
+			return;
 
+			var mimeType = fileOb.type;
+			if (mimeType.match(/image\/*/) == null) {
+				alert("Only images are supported.");
+				return;
+			}
+
+			var reader = new FileReader();
+			reader.readAsDataURL(fileOb); 
+			reader.onload = (_event) => { 
+				this.previewURL = reader.result; 
+			}
+		}
+
+		cropMoved(data){
+			this.imgUrl = this.angularCropper.cropper.getCroppedCanvas().toDataURL();
+		}
+		crop(){
+			this.imageUpload();
+		}
+		left(){
+			this.angularCropper.cropper.rotate(-90);
+		}
+		right(){
+			this.angularCropper.cropper.rotate(90);
+		}
+		flipH(){
+			var val = this.angularCropper.cropper.getData().scaleX;
+			this.angularCropper.cropper.scaleX(-val);
+		}
+		flipV(){
+			var val = this.angularCropper.cropper.getData().scaleY;
+			this.angularCropper.cropper.scaleY(-val);
+		}
+		/// previous cropper code...
+/*
 		@ViewChild('imageCropper',{ static: true })
 		imageCropper: ImageCropperComponent;
 
@@ -127,4 +182,5 @@ export class SearchComponent implements OnInit {
 		{
 			this.imageCropper.flipHorizontal();
 		}
+		*/
 }
