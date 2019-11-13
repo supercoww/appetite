@@ -2,6 +2,8 @@
 import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
 import { MatInput } from '@angular/material/input';
 import * as Tesseract from 'tesseract.js';
+import { ImageCroppedEvent, ImageCropperComponent } from 'ngx-image-cropper';
+
 
 interface IWindow extends Window {
 	webkitSpeechRecognition: any;
@@ -17,6 +19,12 @@ const { webkitSpeechRecognition }: IWindow = (window as any) as IWindow;
 export class SearchComponent implements OnInit {
 	@ViewChild('searchInput', { static: true }) searchInput: MatInput;
 	// tslint:disable-next-line: variable-name
+
+	imageChangedEvent: any = '';
+	croppedImage: any = '';
+	public imgUrl:any='';
+	public cropperHidden = true;
+
 	private _searchString = '';
 	public get searchString() {
 		return this._searchString;
@@ -26,7 +34,7 @@ export class SearchComponent implements OnInit {
 		this.searchInput.focus();
 		console.log('focused');
 	}
-
+	
 	speechRecognition: SpeechRecognition;
 
 	constructor() {
@@ -60,13 +68,14 @@ export class SearchComponent implements OnInit {
 	}
 
 	imageUpload() {
-		console.log('imageupload');
-		const fileUp = document.getElementById('realImageUpload') as HTMLInputElement;
-		console.log(fileUp.files);
-		const fileOb = fileUp.files[0];
-
+		this.cropperHidden=true;
+		alert('imageupload');
+		//const fileUp = document.getElementById('realImageUpload') as HTMLInputElement;
+		//console.log(fileUp.files);
+		//const fileOb = fileUp.files[0];
+		//alert(fileOb.name);
 		Tesseract.recognize(
-			fileOb,'eng',
+			this.imgUrl,'eng',
 			{ 
 				logger: m => {
 					console.log(m);
@@ -74,12 +83,13 @@ export class SearchComponent implements OnInit {
 					var currProcess = m['status'] ;
 					// TODO :- progress bar using above vars instead of spinner
 					console.log(currProcess,progess);
+					this.searchString=currProcess +"   "+ progess;
 				}
 			}
 		  ).then(({ data: { text } }) => {
 			  var imgQuery = this.formatQuery(text);
 			  this.searchString = imgQuery;
-			  console.log(imgQuery);
+			  alert(imgQuery);
 		  })
 		}
 
@@ -88,4 +98,33 @@ export class SearchComponent implements OnInit {
 			return text.replace(/(\r\n|\n|\r)/gm," "); // replacing newlines with space
 		}
 
+		@ViewChild('imageCropper',{ static: true })
+		imageCropper: ImageCropperComponent;
+
+		fileChangeEvent(event: any): void {
+			this.imageChangedEvent = event;
+			this.cropperHidden=false;
+			console.log("filechangeeevtn");
+		}
+		imageCropped(event: ImageCroppedEvent) {
+			this.croppedImage = event.base64;
+			this.imgUrl = this.croppedImage; // passing to recognise 
+			console.log("imagecropped");
+		}
+		crop()
+		{
+			this.imageUpload();
+		}
+		left()
+		{
+			this.imageCropper.rotateLeft();
+		}
+		right()
+		{
+			this.imageCropper.rotateRight();
+		}
+		flip()
+		{
+			this.imageCropper.flipHorizontal();
+		}
 }

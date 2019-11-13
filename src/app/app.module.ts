@@ -11,10 +11,11 @@ import { TopBarComponent } from './top-bar/top-bar.component';
 import { HomeComponent } from './pages/home/home.component';
 import { ResultsComponent } from './pages/home/results/results.component';
 import { SearchComponent } from './pages/home/search/search.component';
+import { ImageCropperModule } from 'ngx-image-cropper';
 
 @NgModule({
 	declarations: [AppComponent, TopBarComponent, HomeComponent, SearchComponent, ResultsComponent],
-	imports: [BrowserModule, AppRoutingModule, BrowserAnimationsModule, MaterialModule, FormsModule],
+	imports: [BrowserModule, AppRoutingModule, BrowserAnimationsModule, MaterialModule, FormsModule,ImageCropperModule],
 	providers: [],
 	bootstrap: [AppComponent]
 })

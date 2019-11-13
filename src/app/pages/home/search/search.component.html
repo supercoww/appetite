@@ -23,6 +23,25 @@
 		<mat-icon matSuffix>camera_alt</mat-icon>
 		Camera
 	</button>
-	<input type="file" name="image" id="realImageUpload" (input)=imageUpload() hidden>
+	<input type="file" name="image" id="realImageUpload" (change)="fileChangeEvent($event)" hidden>
 </div>
+
+<div [hidden]="cropperHidden">
+	<button (click)="crop()">Crop</button>
+	<button (click)="left()">Rotate Left</button>
+	<button (click)="right()">Rotate right</button>
+	<button (click)="flip()">Flip</button>
+	<image-cropper
+	style="width:512px;"
+    [imageChangedEvent]="imageChangedEvent"
+    [maintainAspectRatio]="false"
+    [resizeToWidth]="128"
+    format="png"
+    (imageCropped)="imageCropped($event)"
+	autoCrop=false;
+	#imageCropper
+></image-cropper>
+	<img [src]="croppedImage" float="right" />
+</div>
+
 
