@@ -1,11 +1,22 @@
 import { Injectable, Query } from '@angular/core';
-import { forkJoin } from 'rxjs';
+import { forkJoin, VirtualTimeScheduler } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs/operators'
+import { map, filter } from 'rxjs/operators'
 import { checkServerIdentity } from 'tls';
 @Injectable({
 	providedIn: 'root'
 })
+class query{
+
+	constructor(text,sort,filters)
+	{
+		this.text=text;
+		if(sort!=null)
+		this.sort=sort;
+		if(filters!=null)this.filters=filters;
+
+	}
+}
 
 export class DataServiceService {
 
@@ -35,16 +46,24 @@ export class DataServiceService {
 	query = {};
 	results = []
 	filteredresults = []
+	filters=null
+	sort=null
 
 
 	constructor(private http: HttpClient) {
 
 
 	}
-	fetchresults(query) {
 
+	setparams(sort=null,filters=null)
+	{
+		this.sort=sort;
+		this.filters=filters;
+	}
+	
+	fetchresults(text) {
+		var query=new query(text,this.sort,this.filters);
 		//=this.http.get('?order=desc&sort=activity&q='+query);
-		this.query = query;
 		var suf = this.apiurl + this.parsequery(query);
 		var responses = []
 		this.sitenames.forEach(name => {
