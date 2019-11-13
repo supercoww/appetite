@@ -3,8 +3,8 @@
 		<div class="flex">
 			<div>Stack Search</div>
 			<div style="flex-grow: 1;"></div>
-			<button routerLink="filters" routerLinkActive="router-link-active" mat-icon-button>
-				<mat-icon>filter_list</mat-icon>
+			<button (click)="toggleFilters()" mat-icon-button>
+				<mat-icon>{{ rightIcon }}</mat-icon>
 			</button>
 		</div>
 	</mat-toolbar>

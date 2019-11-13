@@ -78,7 +78,7 @@ export class SearchComponent implements OnInit {
 			this.imgUrl,'eng',
 			{ 
 				logger: m => {
-					console.log(m);
+					//console.log(m);
 					var progess=m['progress']*100 + "%";
 					var currProcess = m['status'] ;
 					// TODO :- progress bar using above vars instead of spinner
@@ -109,7 +109,7 @@ export class SearchComponent implements OnInit {
 		imageCropped(event: ImageCroppedEvent) {
 			this.croppedImage = event.base64;
 			this.imgUrl = this.croppedImage; // passing to recognise 
-			console.log("imagecropped");
+			//console.log(this.imgUrl);
 		}
 		crop()
 		{

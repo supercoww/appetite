@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { DataServiceService } from 'src/app/data-service.service';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { availableFilters, availableSorts } from './available-options';
 @Component({
 	selector: 'app-filters',
@@ -7,6 +6,8 @@ import { availableFilters, availableSorts } from './available-options';
 	styleUrls: ['./filters.component.scss']
 })
 export class FiltersComponent implements OnInit {
+	@Output() toggleFilterEvent = new EventEmitter();
+
 	availableSorts = availableSorts;
 	availableFilters = availableFilters;
 	sortBy: string;
@@ -14,4 +15,9 @@ export class FiltersComponent implements OnInit {
 	constructor() {}
 
 	ngOnInit() {}
+
+	saveFilters() {
+		// TODO: Actually save filters
+		this.toggleFilterEvent.emit();
+	}
 }

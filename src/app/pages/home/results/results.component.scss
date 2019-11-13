@@ -22,7 +22,6 @@
 	font-size: 14px;
 	flex-grow: 1;
 	text-align: right;
-	color: rgba(0, 0, 0, 0.54);
 }
 
 .numbers {
@@ -41,4 +40,17 @@
 
 .card-link {
 	text-decoration: none;
+}
+
+.avatar {
+	width: 40px;
+	border-radius: 50%;
+}
+
+.no-ans {
+	background-color: #5fba7d;
+	border-radius: 4px;
+	padding: 4px;
+	width: fit-content;
+	margin: auto;
 }

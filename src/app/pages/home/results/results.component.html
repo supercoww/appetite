@@ -1,22 +1,10 @@
-<!-- TODO: Display:
-	- score
-	- answer_count
-	- view_count
-	- owner.display_name
-	- owner.profile_image
-	- link
-	- creation_date
-	- last_activity_date
-	- title
-	- is_answered
--->
-<div *ngIf="searchResults; else empty">
+<div *ngIf="searchResults$ | async as searchResults; else empty">
 	<div *ngFor="let result of searchResults">
 		<a [href]="result.link" target="_blank" rel="noopener" class="card-link">
 			<mat-card matRipple class="result-card">
 				<mat-card-header>
-					<div mat-card-avatar>
-						<img [src]="result.owner.profile_image" />
+					<div mat-card-avatar *ngIf="result.owner.profile_image">
+						<img class="avatar" [src]="result.owner.profile_image" />
 					</div>
 					<mat-card-title>{{ result.title }}</mat-card-title>
 					<mat-card-subtitle
@@ -28,16 +16,19 @@
 				<mat-card-content>
 					<div class="numbers">
 						<div>
-							<span class="num">{{ result.score }}</span> <br />
+							<span class="num">{{ result.score | number }}</span> <br />
 							Score
 						</div>
 						<div>
-							<span class="num">{{ result.view_count }}</span> <br />
-							Views
+							<div [ngClass]="{ 'no-ans': result.is_answered }">
+								<span class="num">{{ result.answer_count | number }}</span>
+								<br />
+								Answers
+							</div>
 						</div>
 						<div>
-							<span class="num">{{ result.answer_count }}</span> <br />
-							Answers
+							<span class="num">{{ result.view_count | number }}</span> <br />
+							Views
 						</div>
 					</div>
 				</mat-card-content>

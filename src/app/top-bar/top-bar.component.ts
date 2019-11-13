@@ -1,15 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 
 @Component({
-  selector: 'app-top-bar',
-  templateUrl: './top-bar.component.html',
-  styleUrls: ['./top-bar.component.scss']
+	selector: 'app-top-bar',
+	templateUrl: './top-bar.component.html',
+	styleUrls: ['./top-bar.component.scss']
 })
 export class TopBarComponent implements OnInit {
+	@Input() rightIcon;
 
-  constructor() { }
+	@Output() toggleFilterEvent = new EventEmitter();
 
-  ngOnInit() {
-  }
+	constructor() {}
 
+	ngOnInit() {}
+
+	toggleFilters() {
+		this.toggleFilterEvent.emit();
+	}
 }
