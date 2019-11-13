@@ -12,10 +12,13 @@ import { HomeComponent } from './pages/home/home.component';
 import { ResultsComponent } from './pages/home/results/results.component';
 import { SearchComponent } from './pages/home/search/search.component';
 import { HttpClientModule } from '@angular/common/http';
+import { FiltersComponent } from './pages/home/filters/filters.component';
+import { ImageCropperModule } from 'ngx-image-cropper';
 
 @NgModule({
-	declarations: [AppComponent, TopBarComponent, HomeComponent, SearchComponent, ResultsComponent],
-	imports: [BrowserModule,HttpClientModule,AppRoutingModule, BrowserAnimationsModule,MaterialModule,FormsModule],
+	declarations: [AppComponent,HttpClientModule, TopBarComponent, HomeComponent, SearchComponent, ResultsComponent, FiltersComponent],
+	imports: [BrowserModule, AppRoutingModule, BrowserAnimationsModule, MaterialModule, FormsModule,ImageCropperModule],
+
 	providers: [],
 	bootstrap: [AppComponent]
 })

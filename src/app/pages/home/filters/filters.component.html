@@ -1,0 +1,58 @@
+<mat-form-field appearance="standard">
+	<mat-label>Sort by</mat-label>
+	<mat-select [(value)]="sortBy">
+		<mat-option [value]="sort.id" *ngFor="let sort of availableSorts">{{ sort.displayName }}</mat-option>
+	</mat-select>
+</mat-form-field>
+
+<h2>Filters</h2>
+
+<div *ngFor="let filter of availableFilters" class="filter-option">
+	{{ filter.displayName }} <br />
+	<ng-container *ngIf="filter.type === 'number'">
+		<mat-form-field appearance="standard">
+			<mat-label>Type</mat-label>
+			<mat-select>
+				<mat-option>Disable</mat-option>
+				<mat-option value="min">At Least</mat-option>
+				<mat-option value="max">At Most</mat-option>
+			</mat-select>
+		</mat-form-field>
+
+		<mat-form-field appearance="standard">
+			<mat-label>Value</mat-label>
+			<input matInput type="number" />
+		</mat-form-field>
+	</ng-container>
+
+	<ng-container *ngIf="filter.type === 'date'">
+		<mat-form-field appearance="standard">
+			<mat-label>Type</mat-label>
+			<mat-select>
+				<mat-option>Disable</mat-option>
+				<mat-option value="min">After</mat-option>
+				<mat-option value="max">Before</mat-option>
+			</mat-select>
+		</mat-form-field>
+
+		<mat-form-field appearance="standard">
+			<mat-label>Date</mat-label>
+			<input matInput type="datetime" [matDatepicker]="myDatepicker" />
+			<mat-datepicker-toggle matSuffix [for]="myDatepicker"></mat-datepicker-toggle>
+			<mat-datepicker #myDatepicker></mat-datepicker>
+		</mat-form-field>
+	</ng-container>
+
+	<ng-container *ngIf="filter.type === 'boolean'">
+		<mat-form-field appearance="standard">
+			<mat-label>Select</mat-label>
+			<mat-select>
+				<mat-option>Disable</mat-option>
+				<mat-option value="true">{{ filter.displayName }}</mat-option>
+				<mat-option value="false">Not {{ filter.displayName }}</mat-option>
+			</mat-select>
+		</mat-form-field>
+	</ng-container>
+
+	<mat-divider></mat-divider>
+</div>
