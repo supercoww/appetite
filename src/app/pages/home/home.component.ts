@@ -21,6 +21,6 @@ export class HomeComponent implements OnInit {
 
 	// TODO: pass filter and sort data
 	getSearchResults() {
-		return this.dataService.fetchresults({ text: this.searchString });
+		return this.dataService.fetchresults(this.searchString);
 	}
 }
