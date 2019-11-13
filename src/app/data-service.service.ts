@@ -1,29 +1,25 @@
-import { Injectable, Query } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { forkJoin, VirtualTimeScheduler } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { map, filter } from 'rxjs/operators'
+import { map, filter } from 'rxjs/operators';
 import { checkServerIdentity } from 'tls';
-@Injectable({
-	providedIn: 'root'
-})
 
-class query{
-
+class Query {
 	text;
 	sort;
 	filters;
-	constructor(text,sort,filters)
-	{
-		this.text=text;
-		if(sort!=null)
-		this.sort=sort;
-		if(filters!=null)this.filters=filters;
 
+	constructor(text, sort, filters) {
+		this.text = text;
+		if (sort != null) this.sort = sort;
+		if (filters != null) this.filters = filters;
 	}
 }
 
+@Injectable({
+	providedIn: 'root'
+})
 export class DataServiceService {
-
 	/*
 		Prototype for Query Object
 		{
@@ -42,41 +38,36 @@ export class DataServiceService {
 
 	//Configuration
 	key = 'tOO5hgmFwGE*fxvgJn8U8A((';
-	sitenames = ['stackoverflow', 'math', 'physics', 'askubuntu']
-	availablefilters = ['view_count', 'answer_count', 'score', 'activity', 'is_answered', 'creationdate']
+	sitenames = ['stackoverflow', 'math', 'physics', 'askubuntu'];
+	availablefilters = ['view_count', 'answer_count', 'score', 'activity', 'is_answered', 'creationdate'];
 	availablesorts = ['activitydate', 'votes', 'view_count'];
-	apiurl = "https://api.stackexchange.com/2.2/search/advanced?key=" + this.key;
-	defaultsort = "view_count";
+	apiurl = 'https://api.stackexchange.com/2.2/search/advanced?key=' + this.key;
+	defaultsort = 'view_count';
 	query = {};
-	results = []
-	filteredresults = []
-	filters=null
-	sort=null
+	results = [];
+	filteredresults = [];
+	filters = null;
+	sort = null;
 
+	constructor(private http: HttpClient) {}
 
-	constructor(private http: HttpClient) {
-
-
+	setparams(sort = null, filters = null) {
+		this.sort = sort;
+		this.filters = filters;
 	}
 
-	setparams(sort=null,filters=null)
-	{
-		this.sort=sort;
-		this.filters=filters;
-	}
-	
 	fetchresults(text) {
-		var query=new query(text,this.sort,this.filters);
+		var query = new Query(text, this.sort, this.filters);
 		//=this.http.get('?order=desc&sort=activity&q='+query);
 		var suf = this.apiurl + this.parsequery(query);
-		var responses = []
+		var responses = [];
 		this.sitenames.forEach(name => {
-			let r = this.http.get(suf + "&site=" + name);
+			let r = this.http.get(suf + '&site=' + name);
 			responses.push(r);
 		});
-		var results = forkJoin(responses).pipe(map
-			(res => {
-				var combinearray = []
+		var results = forkJoin(responses).pipe(
+			map(res => {
+				var combinearray = [];
 
 				res.forEach(ele => {
 					ele.items.forEach(v => combinearray.push(v));
@@ -86,76 +77,61 @@ export class DataServiceService {
 				combinearray = this.filterresult(combinearray, query);
 				combinearray = this.sortcombineresult(combinearray, query);
 
-
 				return combinearray;
-
-			}));
+			})
+		);
 
 		return results;
-
-
 	}
 	filterresult(results, query) {
-
-		var filteredresults = []
+		var filteredresults = [];
 		if (!query.filters) {
 			filteredresults = results;
 			return filteredresults;
-		}
-		else if (query.filters.length == 0) {
+		} else if (query.filters.length == 0) {
 			filteredresults = results;
 			return filteredresults;
 		}
 		results.forEach(ele => {
-			if (this.check(ele, query.filters)==true) {
+			if (this.check(ele, query.filters) == true) {
 				filteredresults.push(ele);
 			}
-
 		});
 		return filteredresults;
-
-
 	}
 	sortcombineresult(results, query) {
 		var sortval;
 		if (query.sort) {
 			sortval = query.sort;
-		}
-		else {
+		} else {
 			sortval = this.defaultsort;
 		}
-		results.sort(function (a, b) {
+		results.sort(function(a, b) {
 			if (a[sortval] > b[sortval]) {
 				return -1;
-			}
-			else if (a[sortval] < b[sortval]) {
+			} else if (a[sortval] < b[sortval]) {
 				return 1;
+			} else {
+				return 0; //If equal then no swapping i.e More relevant ans will stay at the top
 			}
-			else {
-				return 0;								//If equal then no swapping i.e More relevant ans will stay at the top
-			}
-		}
-		);
+		});
 		return results;
 	}
 
-
 	parsequery(query) {
-		var suf = "&q=" + query.text;
-		suf = suf + "&sort=relevance";
+		var suf = '&q=' + query.text;
+		suf = suf + '&sort=relevance';
 		return suf;
-
 	}
 
 	check(ele, filters) {
 		var flag = true;
-		for(var i=0;i<filters.length;i++)
-		{
-			var element=filters[i];
-			
+		for (var i = 0; i < filters.length; i++) {
+			var element = filters[i];
+
 			var name = element.filtername;
 			console.log(name, ele[name]);
-			console.log(element.min,element.max)
+			console.log(element.min, element.max);
 			//console.log(element.filtername,element.min,element.max,ele.name);
 			if (element.min) {
 				if (ele[name] >= element.min) {
@@ -163,28 +139,15 @@ export class DataServiceService {
 						if (ele[name] > element.max) {
 							return false;
 						}
-
 					}
-
-				}
-				else return false;
-			}
-
-
-			else if (element.max) {
+				} else return false;
+			} else if (element.max) {
 				if (ele[name] > element.max) {
-
 					return false;
 				}
 			}
+		}
 
-
-
-		};
-	
 		return flag;
 	}
-
-
-
 }
