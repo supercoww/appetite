@@ -11,35 +11,28 @@
 	{{ filter.displayName }} <br />
 	<ng-container *ngIf="filter.type === 'number'">
 		<mat-form-field appearance="standard">
-			<mat-label>Type</mat-label>
-			<mat-select>
-				<mat-option>Disable</mat-option>
-				<mat-option value="min">At Least</mat-option>
-				<mat-option value="max">At Most</mat-option>
-			</mat-select>
+			<mat-label>Min</mat-label>
+			<input matInput type="number" />
 		</mat-form-field>
-
 		<mat-form-field appearance="standard">
-			<mat-label>Value</mat-label>
+			<mat-label>Max</mat-label>
 			<input matInput type="number" />
 		</mat-form-field>
 	</ng-container>
 
 	<ng-container *ngIf="filter.type === 'date'">
 		<mat-form-field appearance="standard">
-			<mat-label>Type</mat-label>
-			<mat-select>
-				<mat-option>Disable</mat-option>
-				<mat-option value="min">After</mat-option>
-				<mat-option value="max">Before</mat-option>
-			</mat-select>
+			<mat-label>Start Date</mat-label>
+			<input matInput type="datetime" [matDatepicker]="myDatepickerStart" />
+			<mat-datepicker-toggle matSuffix [for]="myDatepickerStart"></mat-datepicker-toggle>
+			<mat-datepicker #myDatepickerStart></mat-datepicker>
 		</mat-form-field>
 
 		<mat-form-field appearance="standard">
-			<mat-label>Date</mat-label>
-			<input matInput type="datetime" [matDatepicker]="myDatepicker" />
-			<mat-datepicker-toggle matSuffix [for]="myDatepicker"></mat-datepicker-toggle>
-			<mat-datepicker #myDatepicker></mat-datepicker>
+			<mat-label>End Date</mat-label>
+			<input matInput type="datetime" [matDatepicker]="myDatepickerEnd" />
+			<mat-datepicker-toggle matSuffix [for]="myDatepickerEnd"></mat-datepicker-toggle>
+			<mat-datepicker #myDatepickerEnd></mat-datepicker>
 		</mat-form-field>
 	</ng-container>
 

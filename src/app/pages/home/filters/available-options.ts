@@ -1,6 +1,6 @@
-import { IFilter, ISort } from 'src/interfaces';
+import { IFilterOption, ISort } from 'src/interfaces';
 
-export const availableFilters: IFilter[] = [
+export const availableFilters: IFilterOption[] = [
 	{
 		displayName: 'Views',
 		id: 'view_count',
