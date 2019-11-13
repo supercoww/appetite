@@ -1,4 +1,9 @@
-<app-top-bar></app-top-bar>
-<div class="outlet-container container">
+<app-top-bar [rightIcon]="topBarFilterIcon" (toggleFilterEvent)="toggleFilterMenu()" #topBar></app-top-bar>
+
+<div [ngStyle]="{ display: showFilters ? 'none' : 'block' }" class="outlet-container container">
 	<router-outlet></router-outlet>
+</div>
+
+<div class="outlet-container container" *ngIf="showFilters">
+	<app-filters (toggleFilterEvent)="toggleFilterMenu()"></app-filters>
 </div>

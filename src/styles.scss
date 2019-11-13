@@ -57,3 +57,9 @@ body {
 	height: 100%;
 	align-items: center;
 }
+
+.floating-fab {
+	position: fixed !important;
+	bottom: 30px !important;
+	right: 25px !important;
+}
