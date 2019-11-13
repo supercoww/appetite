@@ -11,9 +11,10 @@ import { TopBarComponent } from './top-bar/top-bar.component';
 import { HomeComponent } from './pages/home/home.component';
 import { ResultsComponent } from './pages/home/results/results.component';
 import { SearchComponent } from './pages/home/search/search.component';
+import { FiltersComponent } from './pages/home/filters/filters.component';
 
 @NgModule({
-	declarations: [AppComponent, TopBarComponent, HomeComponent, SearchComponent, ResultsComponent],
+	declarations: [AppComponent, TopBarComponent, HomeComponent, SearchComponent, ResultsComponent, FiltersComponent],
 	imports: [BrowserModule, AppRoutingModule, BrowserAnimationsModule, MaterialModule, FormsModule],
 	providers: [],
 	bootstrap: [AppComponent]
