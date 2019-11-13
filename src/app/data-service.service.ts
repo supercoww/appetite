@@ -1,5 +1,8 @@
 import { Injectable, Query } from '@angular/core';
-
+import { forkJoin } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { map } from 'rxjs/operators'
+import { checkServerIdentity } from 'tls';
 @Injectable({
 	providedIn: 'root'
 })
@@ -23,152 +26,142 @@ export class DataServiceService {
 */
 
 	//Configuration
-	sitenames = ['stackoverflow','math','physics','askubuntu']
-	availablefilters=['view_count','answer_count','score','activity','is_answered','creationdate']
-	availablesorts=['activitydate','votes','view_count'];
-	apiurl = "https://api.stackexchange.com/2.2/search/advanced?";
-	defaultsort="view_count";
-		query={};
-
+	key = 'tOO5hgmFwGE*fxvgJn8U8A((';
+	sitenames = ['stackoverflow', 'math', 'physics', 'askubuntu']
+	availablefilters = ['view_count', 'answer_count', 'score', 'activity', 'is_answered', 'creationdate']
+	availablesorts = ['activitydate', 'votes', 'view_count'];
+	apiurl = "https://api.stackexchange.com/2.2/search/advanced?key=" + this.key;
+	defaultsort = "view_count";
+	query = {};
 	results = []
-	filteredresults=[]
-	
+	filteredresults = []
 
-	constructor() {
-	
-		
-	}
-	utility(suf,i,query)
-	{
-		if(i>=this.sitenames.length)
-		{
-			this.filterresult(query);
-			this.sortcombineresult(query);
-			console.log(this.filteredresults);
-			console.log(this.results);
-			return;
 
-		}
-		fetch(suf+"&site="+this.sitenames[i]).then(response => response.json()).then(res => {
-			this.results=this.results.concat(res.items);
-			this.utility(suf,i+1,query);
-			return;
-		});
+	constructor(private http: HttpClient) {
+
+
 	}
 	fetchresults(query) {
-		
+
 		//=this.http.get('?order=desc&sort=activity&q='+query);
-		this.query=query;
-		var suf=this.apiurl+this.parsequery(query);
-		console.log(suf);
-		this.utility(suf,0,query);
-	
+		this.query = query;
+		var suf = this.apiurl + this.parsequery(query);
+		var responses = []
+		this.sitenames.forEach(name => {
+			let r = this.http.get(suf + "&site=" + name);
+			responses.push(r);
+		});
+		var results = forkJoin(responses).pipe(map
+			(res => {
+				var combinearray = []
 
-	}
-	
-/*
-	filterresult(query)
-	{
-		if(query.filters)
-		{
-			query.filters.forEach(element => {
-				element.
-				
-			});
-		}
-	}
-	*/
-	filterresult(query)
-	{
-		if(!query.filters)
-		{
-			this.filteredresults=this.results;
-			return;
-		}
-		else if(query.filters.length==0)
-		{
-			this.filteredresults=this.results;
-			return;
-		}
-		this.results.forEach(ele=>
-			{
-					query.filters.forEach(element => {
-					
-						var name=element.filtername;
-						console.log(name,ele.name);
-						//console.log(element.filtername,element.min,element.max,ele.name);
-						if(element.min)
-						{
-							if(ele[name]>= element.min)
-							{
-								if(element.max)
-								{
-									if(ele[name] <= element.max)
-									{
-										this.filteredresults.push(ele);
-									}
-								
-								}
-								else this.filteredresults.push(ele);
-							}
-						}
-
-
-						else if(element.max)
-						{
-							if(ele[name] <= element.max)
-							{
-								
-								this.filteredresults.push(ele);
-							}
-						}
-						else this.filteredresults.push(ele);
-
-
-					});
+				res.forEach(ele => {
+					ele.items.forEach(v => combinearray.push(v));
+					//var elem=this.filterresult(ele.items,query);
+					//var elem=this.sortcombineresult(elem.items,query);
 				});
-				
+				combinearray = this.filterresult(combinearray, query);
+				combinearray = this.sortcombineresult(combinearray, query);
 
-	
-}
-	sortcombineresult(query)
-	{
+
+				return combinearray;
+
+			}));
+
+		return results;
+
+
+	}
+	filterresult(results, query) {
+
+		var filteredresults = []
+		if (!query.filters) {
+			filteredresults = results;
+			return filteredresults;
+		}
+		else if (query.filters.length == 0) {
+			filteredresults = results;
+			return filteredresults;
+		}
+		results.forEach(ele => {
+			if (this.check(ele, query.filters)==true) {
+				filteredresults.push(ele);
+			}
+
+		});
+		return filteredresults;
+
+
+	}
+	sortcombineresult(results, query) {
 		var sortval;
-		if(query.sort)
-		{
-			sortval=query.sort;
+		if (query.sort) {
+			sortval = query.sort;
 		}
-		else
-		{
-			sortval=this.defaultsort;
+		else {
+			sortval = this.defaultsort;
 		}
-		this.filteredresults.sort( function(a,b)
-		{
-				if(a.sortval > b.sortval)
-				{
-					return -1;
-				}
-				else if(a.sortval < b.sortval)
-				{
-					return 1;
-				}
-				else
-				{
-					return 0;								//If equal then no swapping i.e More relevant ans will stay at the top
-				}
+		results.sort(function (a, b) {
+			if (a[sortval] > b[sortval]) {
+				return -1;
+			}
+			else if (a[sortval] < b[sortval]) {
+				return 1;
+			}
+			else {
+				return 0;								//If equal then no swapping i.e More relevant ans will stay at the top
+			}
 		}
 		);
+		return results;
 	}
 
-	parsequery(query)
-	{
-		var suf="q="+query.text;
-		suf=suf+"&sort=relevance";
+
+	parsequery(query) {
+		var suf = "&q=" + query.text;
+		suf = suf + "&sort=relevance";
 		return suf;
 
 	}
 
+	check(ele, filters) {
+		var flag = true;
+		for(var i=0;i<filters.length;i++)
+		{
+			var element=filters[i];
+			
+			var name = element.filtername;
+			console.log(name, ele[name]);
+			console.log(element.min,element.max)
+			//console.log(element.filtername,element.min,element.max,ele.name);
+			if (element.min) {
+				if (ele[name] >= element.min) {
+					if (element.max) {
+						if (ele[name] > element.max) {
+							return false;
+						}
 
+					}
+
+				}
+				else return false;
+			}
+
+
+			else if (element.max) {
+				if (ele[name] > element.max) {
+
+					return false;
+				}
+			}
+
+
+
+		};
 	
+		return flag;
+	}
+
+
 
 }
