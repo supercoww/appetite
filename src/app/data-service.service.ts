@@ -6,8 +6,12 @@ import { checkServerIdentity } from 'tls';
 @Injectable({
 	providedIn: 'root'
 })
+
 class query{
 
+	text;
+	sort;
+	filters;
 	constructor(text,sort,filters)
 	{
 		this.text=text;
