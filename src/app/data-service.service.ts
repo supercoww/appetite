@@ -41,7 +41,7 @@ export class DataServiceService {
 	sitenames = ['stackoverflow', 'math', 'physics', 'askubuntu'];
 	availablefilters = ['view_count', 'answer_count', 'score', 'activity', 'is_answered', 'creationdate'];
 	availablesorts = ['activitydate', 'votes', 'view_count'];
-	apiurl = 'https://api.stackexchange.com/2.2/search/advanced?key=' + this.key;
+	apiurl = 'https://cors-anywhere.herokuapp.com/https://api.stackexchange.com/2.2/search/advanced?key=' + this.key;
 	defaultsort = 'view_count';
 	query = {};
 	results = [];
