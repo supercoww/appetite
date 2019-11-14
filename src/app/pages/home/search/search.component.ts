@@ -1,5 +1,4 @@
-
-import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { MatInput } from '@angular/material/input';
 import * as Tesseract from 'tesseract.js';
 import { ImageCroppedEvent, ImageCropperComponent } from 'ngx-image-cropper';
@@ -22,10 +21,11 @@ export class SearchComponent implements OnInit {
 	// tslint:disable-next-line: variable-name
 	//imageChangedEvent: any = '';
 	//croppedImage: any = '';
-	public imgUrl:any='';
+	public imgUrl: any = '';
 	public cropperHidden = true;
 
 	private _searchString = '';
+	voiceButtonColor = '';
 	public get searchString() {
 		return this._searchString;
 	}
@@ -34,15 +34,20 @@ export class SearchComponent implements OnInit {
 		this.searchInput.focus();
 		console.log('focused');
 	}
-	
+
 	speechRecognition: SpeechRecognition;
 
-	constructor() {
+	constructor(private ref: ChangeDetectorRef) {
 		this.speechRecognition = new webkitSpeechRecognition();
 		this.speechRecognition.interimResults = true;
 
-		this.speechRecognition.onstart = _ => console.log('started listening');
-		this.speechRecognition.onend = _ => console.log('stopped listening');
+		this.speechRecognition.onstart = event => {
+			console.log('start');
+		};
+		this.speechRecognition.onend = event => {
+			console.log('end');
+			this.stopListening();
+		};
 
 		this.speechRecognition.onresult = event => {
 			for (let i = event.resultIndex; i < event.results.length; ++i) {
@@ -63,96 +68,101 @@ export class SearchComponent implements OnInit {
 		this.searchEvent.emit(this.searchString);
 	}
 
+	startListening() {
+		this.speechRecognition.start();
+		this.voiceButtonColor = 'accent';
+	}
+
+	stopListening() {
+		this.voiceButtonColor = '';
+		this.ref.detectChanges();
+	}
+
 	clickRealImgBtn() {
 		document.getElementById('realImageUpload').click();
 	}
 
 	imageUpload() {
-		this.cropperHidden=true;
+		this.cropperHidden = true;
 		alert('imageupload');
-		Tesseract.recognize(
-			this.imgUrl,'eng',
-			{ 
-				logger: m => {
-					//console.log(m);
-					var progess=m['progress']*100 + "%";
-					var currProcess = m['status'] ;
-					// TODO :- progress bar using above vars instead of spinner
-					console.log(currProcess,progess);
-					this.searchString=currProcess +"   "+ progess;
-				}
+		Tesseract.recognize(this.imgUrl, 'eng', {
+			logger: m => {
+				//console.log(m);
+				var progess = m['progress'] * 100 + '%';
+				var currProcess = m['status'];
+				// TODO :- progress bar using above vars instead of spinner
+				console.log(currProcess, progess);
+				this.searchString = currProcess + '   ' + progess;
 			}
-		  ).then(({ data: { text } }) => {
-			  var imgQuery = this.formatQuery(text);
-			  this.searchString = imgQuery;
-			  alert(imgQuery);
-		  })
-		}
+		}).then(({ data: { text } }) => {
+			var imgQuery = this.formatQuery(text);
+			this.searchString = imgQuery;
+			alert(imgQuery);
+		});
+	}
 
-		formatQuery(text)
-		{
-			return text.replace(/(\r\n|\n|\r)/gm," "); // replacing newlines with space
-		}
-		//////// Cropper code...
-		@ViewChild('angularCropper',{static:true}) public angularCropper: CropperComponent;
-		imgCrp = null;
-		config = {
-			dragMode : 'crop',
-			autoCrop: false,
-			background : true,
-			movable: true,
-			rotatable : true,
-			scalable: true,
-			zoomable: false,
-			viewMode: 1,
-			checkImageOrigin : true,
-			cropmove:this.cropMoved.bind(this),
-			checkCrossOrigin: true
-		};
-	
-		previewURL: any;
-		imgPreview() {
-			this.cropperHidden = false;
-			const fileUp = document.getElementById('realImageUpload') as HTMLInputElement;
-			const fileOb = fileUp.files[0];
-			if (fileUp.files.length === 0)
+	formatQuery(text) {
+		return text.replace(/(\r\n|\n|\r)/gm, ' '); // replacing newlines with space
+	}
+	//////// Cropper code...
+	@ViewChild('angularCropper', { static: true }) public angularCropper: CropperComponent;
+	imgCrp = null;
+	config = {
+		dragMode: 'crop',
+		autoCrop: false,
+		background: true,
+		movable: true,
+		rotatable: true,
+		scalable: true,
+		zoomable: false,
+		viewMode: 1,
+		checkImageOrigin: true,
+		cropmove: this.cropMoved.bind(this),
+		checkCrossOrigin: true
+	};
+
+	previewURL: any;
+	imgPreview() {
+		this.cropperHidden = false;
+		const fileUp = document.getElementById('realImageUpload') as HTMLInputElement;
+		const fileOb = fileUp.files[0];
+		if (fileUp.files.length === 0) return;
+
+		var mimeType = fileOb.type;
+		if (mimeType.match(/image\/*/) == null) {
+			alert('Only images are supported.');
 			return;
-
-			var mimeType = fileOb.type;
-			if (mimeType.match(/image\/*/) == null) {
-				alert("Only images are supported.");
-				return;
-			}
-
-			var reader = new FileReader();
-			reader.readAsDataURL(fileOb); 
-			reader.onload = (_event) => { 
-				this.previewURL = reader.result; 
-			}
 		}
 
-		cropMoved(data){
-			this.imgUrl = this.angularCropper.cropper.getCroppedCanvas().toDataURL();
-		}
-		crop(){
-			this.imageUpload();
-		}
-		left(){
-			this.angularCropper.cropper.rotate(-90);
-		}
-		right(){
-			this.angularCropper.cropper.rotate(90);
-		}
-		flipH(){
-			var val = this.angularCropper.cropper.getData().scaleX;
-			this.angularCropper.cropper.scaleX(-val);
-		}
-		flipV(){
-			var val = this.angularCropper.cropper.getData().scaleY;
-			this.angularCropper.cropper.scaleY(-val);
-		}
-		/// previous cropper code...
-/*
+		var reader = new FileReader();
+		reader.readAsDataURL(fileOb);
+		reader.onload = _event => {
+			this.previewURL = reader.result;
+		};
+	}
+
+	cropMoved(data) {
+		this.imgUrl = this.angularCropper.cropper.getCroppedCanvas().toDataURL();
+	}
+	crop() {
+		this.imageUpload();
+	}
+	left() {
+		this.angularCropper.cropper.rotate(-90);
+	}
+	right() {
+		this.angularCropper.cropper.rotate(90);
+	}
+	flipH() {
+		var val = this.angularCropper.cropper.getData().scaleX;
+		this.angularCropper.cropper.scaleX(-val);
+	}
+	flipV() {
+		var val = this.angularCropper.cropper.getData().scaleY;
+		this.angularCropper.cropper.scaleY(-val);
+	}
+	/// previous cropper code...
+	/*
 		@ViewChild('imageCropper',{ static: true })
 		imageCropper: ImageCropperComponent;
 
@@ -163,7 +173,7 @@ export class SearchComponent implements OnInit {
 		}
 		imageCropped(event: ImageCroppedEvent) {
 			this.croppedImage = event.base64;
-			this.imgUrl = this.croppedImage; // passing to recognise 
+			this.imgUrl = this.croppedImage; // passing to recognise
 			//console.log(this.imgUrl);
 		}
 		crop()
