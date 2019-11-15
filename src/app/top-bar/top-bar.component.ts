@@ -9,6 +9,7 @@ export class TopBarComponent implements OnInit {
 	@Input() rightIcon;
 
 	@Output() toggleFilterEvent = new EventEmitter();
+	@Output() drawerEvent = new EventEmitter();
 
 	constructor() {}
 

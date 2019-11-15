@@ -1,9 +1,32 @@
-<app-top-bar [rightIcon]="topBarFilterIcon" (toggleFilterEvent)="toggleFilterMenu()" #topBar></app-top-bar>
+<app-top-bar
+	[rightIcon]="topBarFilterIcon"
+	(drawerEvent)="drawer.toggle()"
+	(toggleFilterEvent)="toggleFilterMenu()"
+	#topBar
+></app-top-bar>
 
-<div [ngStyle]="{ display: showFilters ? 'none' : 'block' }" class="outlet-container container">
-	<router-outlet></router-outlet>
-</div>
+<mat-drawer-container class="drawer-container outlet-container">
+	<mat-drawer class="drawer outlet-container" mode="over" #drawer>
+		<mat-nav-list>
+			<a routerLink="" routerLinkActive="router-link-active" (click)="drawer.close()" mat-list-item
+				>Home</a
+			>
+			<a
+				routerLink="history"
+				routerLinkActive="router-link-active"
+				(click)="drawer.close()"
+				mat-list-item
+				>History</a
+			>
+		</mat-nav-list>
+	</mat-drawer>
+	<mat-drawer-content>
+		<div [ngStyle]="{ display: showFilters ? 'none' : 'block' }" class="container">
+			<router-outlet></router-outlet>
+		</div>
 
-<div class="outlet-container container" [ngStyle]="{ display: showFilters ? 'block' : 'none' }">
-	<app-filters (toggleFilterEvent)="toggleFilterMenu()"></app-filters>
-</div>
+		<div [ngStyle]="{ display: showFilters ? 'block' : 'none' }">
+			<app-filters (toggleFilterEvent)="toggleFilterMenu()"></app-filters>
+		</div>
+	</mat-drawer-content>
+</mat-drawer-container>
