@@ -25,7 +25,7 @@
 			<router-outlet></router-outlet>
 		</div>
 
-		<div [ngStyle]="{ display: showFilters ? 'block' : 'none' }">
+		<div [ngStyle]="{ display: showFilters ? 'block' : 'none' }" class="container">
 			<app-filters (toggleFilterEvent)="toggleFilterMenu()"></app-filters>
 		</div>
 	</mat-drawer-content>
