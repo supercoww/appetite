@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { map, filter } from 'rxjs/operators';
 import { checkServerIdentity } from 'tls';
 
+
 class Query {
 	text;
 	sort;
@@ -48,7 +49,7 @@ export class DataServiceService {
 	filteredresults = [];
 	filters = null;
 	sort = null;
-
+	doesMatch=require('does-match');
 	constructor(private http: HttpClient) {}
 
 	setparams(sort = null, filters = null) {
@@ -57,7 +58,9 @@ export class DataServiceService {
 	}
 
 	fetchresults(text) {
+		console.log(this.doesMatch);
 		var query = new Query(text, this.sort, this.filters);
+		console.log(this.doesMatch("hello world","world is a shitty place"));
 		//=this.http.get('?order=desc&sort=activity&q='+query);
 		var suf = this.apiurl + this.parsequery(query);
 		var responses = [];
@@ -101,10 +104,30 @@ export class DataServiceService {
 	}
 	sortcombineresult(results, query) {
 		var sortval;
+		console.log(query);
 		if (query.sort) {
 			sortval = query.sort;
-		} else {
-			sortval = this.defaultsort;
+		} 
+		else 
+		{
+			var doesMatch=this.doesMatch;
+			results.sort(function(a,b)
+			{
+
+				if(doesMatch(query.text,a.title) > doesMatch(query.text,b.title))
+				{
+					return -1;
+				}
+				else if(doesMatch(query.text,a.title) < doesMatch(query.text,b.title))return 1;
+				else return 0;
+
+
+
+
+
+
+			});
+			return results;
 		}
 		results.sort(function(a, b) {
 			if (a[sortval] > b[sortval]) {
