@@ -16,6 +16,7 @@ import { FiltersComponent } from './pages/home/filters/filters.component';
 import { ImageCropperModule } from 'ngx-image-cropper';
 
 import { AngularCropperjsModule } from 'angular-cropperjs';
+import { HistoryComponent } from './pages/history/history.component';
 
 @NgModule({
 	declarations: [
@@ -24,7 +25,8 @@ import { AngularCropperjsModule } from 'angular-cropperjs';
 		HomeComponent,
 		SearchComponent,
 		ResultsComponent,
-		FiltersComponent
+		FiltersComponent,
+		HistoryComponent
 	],
 	imports: [
 		BrowserModule,

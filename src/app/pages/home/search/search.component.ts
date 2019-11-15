@@ -4,6 +4,7 @@ import * as Tesseract from 'tesseract.js';
 import { ImageCroppedEvent, ImageCropperComponent } from 'ngx-image-cropper';
 
 import { CropperComponent } from 'angular-cropperjs';
+import { HistoryService } from 'src/app/history.service';
 
 interface IWindow extends Window {
 	webkitSpeechRecognition: any;
@@ -37,7 +38,7 @@ export class SearchComponent implements OnInit {
 
 	speechRecognition: SpeechRecognition;
 
-	constructor(private ref: ChangeDetectorRef) {
+	constructor(private ref: ChangeDetectorRef, private historyService: HistoryService) {
 		this.speechRecognition = new webkitSpeechRecognition();
 		this.speechRecognition.interimResults = true;
 
@@ -66,6 +67,7 @@ export class SearchComponent implements OnInit {
 
 	triggerSearch() {
 		this.searchEvent.emit(this.searchString);
+		this.historyService.addHistory(this.searchString);
 	}
 
 	startListening() {
