@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 
 @Injectable({
 	providedIn: 'root'
 })
 export class HistoryService {
 	private history: string[];
+	private history$: Observable<string[]>;
 
 	constructor() {
 		this.history = JSON.parse(localStorage.getItem('history')) || [];
@@ -15,7 +17,7 @@ export class HistoryService {
 	}
 
 	addHistory(entry: string) {
-		this.history.push(entry);
+		this.history.unshift(entry);
 		localStorage.setItem('history', JSON.stringify(this.history));
 	}
 }
