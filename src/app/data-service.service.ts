@@ -153,6 +153,16 @@ export class DataServiceService {
 			var element = filters[i];
 
 			var name = element.filtername;
+			if(name=="is_answered")
+			{
+				if(element.min==0)
+				{
+					return true;
+				}
+				else if(element.min==1 && ele[name]==true)return true;
+				else if(ele[name]==false)return true;
+				else return false;
+			}
 			console.log(name, ele[name]);
 			console.log(element.min, element.max);
 			//console.log(element.filtername,element.min,element.max,ele.name);
