@@ -4,6 +4,6 @@
 	<router-outlet></router-outlet>
 </div>
 
-<div class="outlet-container container" *ngIf="showFilters">
+<div class="outlet-container container" [ngStyle]="{ display: showFilters ? 'block' : 'none' }">
 	<app-filters (toggleFilterEvent)="toggleFilterMenu()"></app-filters>
 </div>

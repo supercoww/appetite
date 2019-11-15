@@ -54,3 +54,9 @@
 	width: fit-content;
 	margin: auto;
 }
+
+@media screen and (max-height: 400px) {
+	.center {
+		display: none;
+	}
+}
