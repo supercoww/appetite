@@ -149,6 +149,7 @@ export class SearchComponent implements OnInit {
 	}
 	crop() {
 		this.imageUpload();
+		this.angularCropper.cropper.destroy();
 	}
 	left() {
 		this.angularCropper.cropper.rotate(-90);
@@ -163,6 +164,11 @@ export class SearchComponent implements OnInit {
 	flipV() {
 		var val = this.angularCropper.cropper.getData().scaleY;
 		this.angularCropper.cropper.scaleY(-val);
+	}
+	discard(){
+		this.angularCropper.cropper.clear();
+		this.angularCropper.cropper.destroy();
+		this.cropperHidden = true;
 	}
 	/// previous cropper code...
 	/*
