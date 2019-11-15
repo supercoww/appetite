@@ -105,7 +105,8 @@ export class SearchComponent implements OnInit {
 		return text.replace(/(\r\n|\n|\r)/gm, ' '); // replacing newlines with space
 	}
 	//////// Cropper code...
-	@ViewChild('angularCropper', { static: true }) public angularCropper: CropperComponent;
+	@ViewChild('angularCropper', { static: false }) public angularCropper: CropperComponent;
+	
 	imgCrp = null;
 	config = {
 		dragMode: 'crop',
@@ -117,7 +118,7 @@ export class SearchComponent implements OnInit {
 		zoomable: false,
 		viewMode: 1,
 		checkImageOrigin: true,
-		cropmove: this.cropMoved.bind(this),
+		cropend: this.cropMoved.bind(this),
 		checkCrossOrigin: true
 	};
 
