@@ -250,7 +250,7 @@ export class SearchComponent implements OnInit {
 	 * @param {File} img 
 	 * @param {boolean} need Do we need to compress the image ,true or false
 	 */
-	compressimg(img, need) {
+	compressimg(img, need:boolean) {
 		if (this.compress == false || need == false) {
 			this.processimg(img);
 			return;
