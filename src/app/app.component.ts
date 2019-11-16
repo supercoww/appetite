@@ -12,11 +12,17 @@ export class AppComponent {
 	showFilters = false;
 	topBarFilterIcon = 'filter_list';
 
+	/**
+	 * Toggles the filter page as visible / not visible
+	 */
 	toggleFilterMenu() {
 		this.showFilters = !this.showFilters;
 		this.topBarFilterIcon = this.topBarFilterIcon === 'close' ? 'filter_list' : 'close';
 	}
 
+	/**
+	 * Opens the side drawer.
+	 */
 	@HostListener('panright')
 	openSidenav() {
 		this.drawer.open();

@@ -17,7 +17,7 @@ export class HomeComponent implements OnInit {
 
 	/**
 	 * Responds to search event from search component
-	 * @param searchString s
+	 * @param searchString string to be used for search
 	 */
 	onSearch(searchString) {
 		this.searchString = searchString;

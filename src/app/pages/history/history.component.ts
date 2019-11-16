@@ -11,6 +11,9 @@ export class HistoryComponent implements OnInit {
 
 	constructor(private historyService: HistoryService) {}
 
+	/**
+	 * Initialize the history array. It takes data from the history service.
+	 */
 	ngOnInit() {
 		this.history = this.historyService.getHistory();
 	}
