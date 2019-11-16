@@ -22,12 +22,13 @@ export class HomeComponent implements OnInit {
 
 	updateLoader(value: boolean) {
 		this.resultLoading = value;
-		console.log('loader: ' + value);
 	}
 
 	// TODO: pass filter and sort data
 	getSearchResults() {
 		this.resultLoading = true;
-		return this.dataService.fetchresults(this.searchString);
+		const results$ = this.dataService.fetchresults(this.searchString);
+		results$.subscribe(() => this.updateLoader(false));
+		return results$;
 	}
 }
