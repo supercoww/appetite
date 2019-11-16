@@ -15,6 +15,9 @@ export class TopBarComponent implements OnInit {
 
 	ngOnInit() {}
 
+	/**
+	 * Emits an event to toggle filter page as visible / not visible
+	 */
 	toggleFilters() {
 		this.toggleFilterEvent.emit();
 	}
