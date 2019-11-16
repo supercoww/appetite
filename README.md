@@ -3,6 +3,8 @@
 A PWA app that allows user to search on StackExchange using Voice,Image and Text inputs
 See the app in action at https://stacksearch-4646c.firebaseapp.com
 
+Documentation: https://supercoww.github.io/appetite/
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
