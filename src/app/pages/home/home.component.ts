@@ -9,6 +9,7 @@ import { DataServiceService } from 'src/app/data-service.service';
 export class HomeComponent implements OnInit {
 	searchString: string;
 	searchResults;
+	resultLoading = false;
 
 	constructor(private dataService: DataServiceService) {}
 
@@ -21,6 +22,7 @@ export class HomeComponent implements OnInit {
 
 	// TODO: pass filter and sort data
 	getSearchResults() {
+		this.resultLoading = true;
 		return this.dataService.fetchresults(this.searchString);
 	}
 }
