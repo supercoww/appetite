@@ -5,6 +5,7 @@ import { ImageCroppedEvent, ImageCropperComponent } from 'ngx-image-cropper';
 import  "firebase/storage";
 import "firebase/app";
 import { CropperComponent } from 'angular-cropperjs';
+import { HistoryService } from 'src/app/history.service';
 
 interface IWindow extends Window {
 	webkitSpeechRecognition: any;
@@ -41,7 +42,7 @@ export class SearchComponent implements OnInit {
 
 	speechRecognition: SpeechRecognition;
 
-	constructor(private ref: ChangeDetectorRef) {
+	constructor(private ref: ChangeDetectorRef, private historyService: HistoryService) {
 		this.speechRecognition = new webkitSpeechRecognition();
 		this.speechRecognition.interimResults = true;
 
@@ -86,6 +87,7 @@ export class SearchComponent implements OnInit {
 
 	triggerSearch() {
 		this.searchEvent.emit(this.searchString);
+		this.historyService.addHistory(this.searchString);
 	}
 
 	startListening() {
@@ -125,7 +127,8 @@ export class SearchComponent implements OnInit {
 		return text.replace(/(\r\n|\n|\r)/gm, ' '); // replacing newlines with space
 	}
 	//////// Cropper code...
-	@ViewChild('angularCropper', { static: true }) public angularCropper: CropperComponent;
+	@ViewChild('angularCropper', { static: false }) public angularCropper: CropperComponent;
+	
 	imgCrp = null;
 	config = {
 		dragMode: 'crop',
@@ -137,7 +140,7 @@ export class SearchComponent implements OnInit {
 		zoomable: false,
 		viewMode: 1,
 		checkImageOrigin: true,
-		cropmove: this.cropMoved.bind(this),
+		cropend: this.cropMoved.bind(this),
 		checkCrossOrigin: true
 	};
 
@@ -168,6 +171,7 @@ export class SearchComponent implements OnInit {
 	}
 	crop() {
 		this.imageUpload();
+		this.angularCropper.cropper.destroy();
 	}
 	left() {
 		this.angularCropper.cropper.rotate(-90);

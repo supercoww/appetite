@@ -11,6 +11,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material';
+import { MatListModule } from '@angular/material/list';
+import { MatSidenavModule } from '@angular/material/sidenav';
 
 @NgModule({
 	declarations: [],
@@ -25,7 +27,9 @@ import { MatNativeDateModule } from '@angular/material';
 		MatSelectModule,
 		MatDividerModule,
 		MatDatepickerModule,
-		MatNativeDateModule
+		MatNativeDateModule,
+		MatListModule,
+		MatSidenavModule
 	],
 	exports: [
 		MatToolbarModule,
@@ -38,7 +42,9 @@ import { MatNativeDateModule } from '@angular/material';
 		MatSelectModule,
 		MatDividerModule,
 		MatDatepickerModule,
-		MatNativeDateModule
+		MatNativeDateModule,
+		MatListModule,
+		MatSidenavModule
 	]
 })
 export class MaterialModule {}
