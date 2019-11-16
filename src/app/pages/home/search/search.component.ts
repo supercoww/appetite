@@ -28,8 +28,6 @@ export class SearchComponent implements OnInit {
 	apiurl = 'https://protected-mesa-37941.herokuapp.com/?url=';
 	@ViewChild('searchInput', { static: true }) searchInput: MatInput;
 	// tslint:disable-next-line: variable-name
-	// imageChangedEvent: any = '';
-	// croppedImage: any = '';
 	public imgUrl: any = '';
 	public cropperHidden = true;
 
@@ -43,7 +41,7 @@ export class SearchComponent implements OnInit {
 	public set searchString(value) {
 		this._searchString = value;
 		this.searchInput.focus();
-		console.log('focused');
+		//console.log('focused');
 	}
 
 	speechRecognition: SpeechRecognition;
@@ -57,10 +55,10 @@ export class SearchComponent implements OnInit {
 		this.speechRecognition.interimResults = true;
 
 		this.speechRecognition.onstart = event => {
-			console.log('start');
+			//console.log('start');
 		};
 		this.speechRecognition.onend = event => {
-			console.log('end');
+			//console.log('end');
 			this.stopListening();
 		};
 
@@ -114,55 +112,20 @@ export class SearchComponent implements OnInit {
 		this.voiceButtonColor = '';
 		this.ref.detectChanges();
 	}
-
+	/**
+	 * This method triggers the click for hidden image upload input field
+	 */
 	clickRealImgBtn() {
 		document.getElementById('realImageUpload').click();
 		this.loaderEvent.emit(true);
 	}
-	/* Tesseract Code ....
-	imageUpload() {
-		this.cropperHidden = true;
-		alert('imageupload');
-		Tesseract.recognize(this.imgUrl, 'eng', {
-			logger: m => {
-				//console.log(m);
-				var progess = m['progress'] * 100 + '%';
-				var currProcess = m['status'];
-				// TODO :- progress bar using above vars instead of spinner
-				console.log(currProcess, progess);
-				this.searchString = currProcess + '   ' + progess;
-			}
-		}).then(({ data: { text } }) => {
-			var imgQuery = this.formatQuery(text);
-			this.searchString = imgQuery;
-			alert(imgQuery);
-		});
-	}
-*/
+	/**
+	 * This method formats the recognized text to replace new lines with spaces
+	 * @param text the recognized text output from the image
+	 */
 	formatQuery(text) {
 		return text.replace(/(\r\n|\n|\r)/gm, ' '); // replacing newlines with space
 	}
-	/*	//////// Cropper code...
-	@ViewChild('angularCropper', { static: false }) public angularCropper: CropperComponent;
-
-	imgCrp = null;
-	config = {
-		dragMode: 'crop',
-		autoCrop: false,
-		background: true,
-		movable: true,
-		rotatable: true,
-		scalable: true,
-		zoomable: false,
-		viewMode: 1,
-		checkImageOrigin: true,
-		cropend: this.cropMoved.bind(this),
-		checkCrossOrigin: true
-	};
-
-	previewURL: any;
-
-*/
 	/**
 	 * Runs checks on the image uploaded.
 	 */
@@ -170,7 +133,7 @@ export class SearchComponent implements OnInit {
 		this.cropperHidden = false;
 		const fileUp = document.getElementById('realImageUpload') as HTMLInputElement;
 		const fileOb = fileUp.files[0];
-		console.log(fileOb);
+		//console.log(fileOb);
 		if (fileUp.files.length === 0) return;
 
 		var mimeType = fileOb.type; // only images checks..
@@ -181,39 +144,10 @@ export class SearchComponent implements OnInit {
 
 		var need = true;
 		if (fileOb.size < this.minsizetocompress) need = false;
-		console.log('processing');
+		//console.log('processing');
 		this.compressimg(fileOb, need);
+	}
 
-		/*	var reader = new FileReader();
-		reader.readAsDataURL(fileOb);
-		reader.onload = _event => {
-			this.previewURL = reader.result;
-		};
-	*/
-	}
-	/*
-	cropMoved(data) {
-		this.imgUrl = this.angularCropper.cropper.getCroppedCanvas().toDataURL();
-	}
-	crop() {
-		this.imageUpload();
-		this.angularCropper.cropper.destroy();
-	}
-	left() {
-		this.angularCropper.cropper.rotate(-90);
-	}
-	right() {
-		this.angularCropper.cropper.rotate(90);
-	}
-	flipH() {
-		var val = this.angularCropper.cropper.getData().scaleX;
-		this.angularCropper.cropper.scaleX(-val);
-	}
-	flipV() {
-		var val = this.angularCropper.cropper.getData().scaleY;
-		this.angularCropper.cropper.scaleY(-val);
-	}
-*/
 	/**
 	 * Processes the image and binds the recognized text with the Search string
 	 * @param img Image file to be processed
@@ -234,14 +168,14 @@ export class SearchComponent implements OnInit {
 				return fileSnapshot.ref
 					.getDownloadURL()
 					.then(url => {
-						console.log(url);
-						console.log('upload-complete');
-						console.log('now recognizing');
+						//console.log(url);
+						//console.log('upload-complete');
+						//console.log('now recognizing');
 						fetch(apiurl + url)
 							.then(response => response.json())
 							.then(response => {
-								console.log(response);
-								console.log('well done');
+								//console.log(response);
+								//console.log('well done');
 								this.loaderEvent.emit(false);
 								if (response.status == 1) {
 									self.searchString = self.formatQuery(response.text);
@@ -258,19 +192,19 @@ export class SearchComponent implements OnInit {
 			.catch(error => this.showError('Error uploading image'));
 	}
 	/**
-	 * Compressed the image if needed anda calls the processimg function for recognizing text
+	 * Compressed the image if needed and calls the processimg function for recognizing text
 	 * @param {File} img Image file to be compressed
 	 * @param {boolean} need Do we need to compress the image ,true or false
 	 */
-	compressimg(img, need: boolean) {
+	compressimg(img, need) {
 		if (this.compress == false || need == false) {
 			this.processimg(img);
 			return;
 		}
 
 		var imageFile = img;
-		console.log('originalFile instanceof Blob', imageFile instanceof Blob); // true
-		console.log(`originalFile size ${imageFile.size / 1024 / 1024} MB`);
+		//console.log('originalFile instanceof Blob', imageFile instanceof Blob); // true
+		//console.log(`originalFile size ${imageFile.size / 1024 / 1024} MB`);
 
 		var options = {
 			maxSizeMB: 1,
@@ -279,8 +213,8 @@ export class SearchComponent implements OnInit {
 		};
 		var self = this;
 		imageCompression(imageFile, options).then(function(compressedFile) {
-			console.log('compressedFile instanceof Blob', compressedFile instanceof Blob); // true
-			console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`); // smaller than maxSizeMB
+			//console.log('compressedFile instanceof Blob', compressedFile instanceof Blob); // true
+			//console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`); // smaller than maxSizeMB
 			self.processimg(compressedFile);
 		});
 	}
