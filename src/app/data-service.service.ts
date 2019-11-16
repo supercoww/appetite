@@ -3,7 +3,15 @@ import { forkJoin, VirtualTimeScheduler } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { map, filter } from 'rxjs/operators';
 import { checkServerIdentity } from 'tls';
-
+/**
+ * Filter object
+ */
+class Filter
+{
+	filtername;
+	min;
+	max;
+}
 
 class Query {
 	text;
@@ -55,11 +63,11 @@ export class DataServiceService {
 	doesMatch=require('does-match');
 	constructor(private http: HttpClient) {}
 	/**
-	 * 
+	 * @typeparam 
 	 * @param {String} sort - The type of sort,Available sort type defined in availabesorts array
 	 * @param filters -The filter object,Consists of a filtername,min and max values
 	 */
-	setparams(sort = null, filters = null) {
+	setparams(sort:string = null, filters = null) {
 		this.sort = sort;
 		this.filters = filters;
 	}
@@ -68,7 +76,7 @@ export class DataServiceService {
 	 * @param {String} text  The query string
 	 * @returns {Array} The result array
 	 */
-	fetchresults(text) {
+	fetchresults(text:String) {
 		console.log(this.doesMatch);
 		var query = new Query(text, this.sort, this.filters);
 		console.log(this.doesMatch("hello world","world is a shitty place"));
@@ -102,7 +110,7 @@ export class DataServiceService {
 	 * @param {Array} results 
 	 * @param {Query} query 
 	 */
-	filterresult(results, query) {
+	filterresult(results:Array<any>, query:Query) {
 		var filteredresults = [];
 		if (!query.filters) {
 			filteredresults = results;
@@ -123,7 +131,7 @@ export class DataServiceService {
 	 * @param {Array} results 
 	 * @param {Query} query 
 	 */
-	sortcombineresult(results, query) {
+	sortcombineresult(results:Array<any>, query:Query) {
 		var sortval;
 		console.log(query);
 		if (query.sort) {
@@ -175,7 +183,7 @@ export class DataServiceService {
 	 * @returns {boolean} true or false
 	 */
 
-	check(ele, filters) {
+	check(ele, filters:Array<Filter>) {
 		var flag = true;
 		for (var i = 0; i < filters.length; i++) {
 			var element = filters[i];
