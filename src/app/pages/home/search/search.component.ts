@@ -2,7 +2,7 @@ import { Component, OnInit, Output, EventEmitter, ViewChild, ChangeDetectorRef }
 import { MatInput } from '@angular/material/input';
 import * as Tesseract from 'tesseract.js';
 import { ImageCroppedEvent, ImageCropperComponent } from 'ngx-image-cropper';
-import  "firebase/storage";
+import "firebase/storage";
 import "firebase/app";
 import { CropperComponent } from 'angular-cropperjs';
 import { HistoryService } from 'src/app/history.service';
@@ -19,9 +19,9 @@ const { webkitSpeechRecognition }: IWindow = (window as any) as IWindow;
 	styleUrls: ['./search.component.scss']
 })
 export class SearchComponent implements OnInit {
-	storage=null;
-	firebase=require('firebase/app');
-	apiurl="https://protected-mesa-37941.herokuapp.com/?url="
+	storage = null;
+	firebase = require('firebase/app');
+	apiurl = "https://protected-mesa-37941.herokuapp.com/?url="
 	@ViewChild('searchInput', { static: true }) searchInput: MatInput;
 	// tslint:disable-next-line: variable-name
 	//imageChangedEvent: any = '';
@@ -63,7 +63,7 @@ export class SearchComponent implements OnInit {
 		};
 
 		this.speechRecognition.lang = 'en-US';
-		
+
 	}
 
 	@Output() searchEvent = new EventEmitter<string>();
@@ -77,9 +77,9 @@ export class SearchComponent implements OnInit {
 			storageBucket: "stacksearch-4646c.appspot.com",
 			messagingSenderId: "845252858351",
 			appId: "1:845252858351:web:dd36c674d91bc093a1261a"
-						};
-				this.firebase.initializeApp(config);
-				this.storage = this.firebase.storage();
+		};
+		this.firebase.initializeApp(config);
+		this.storage = this.firebase.storage();
 
 
 
@@ -128,7 +128,7 @@ export class SearchComponent implements OnInit {
 	}
 	//////// Cropper code...
 	@ViewChild('angularCropper', { static: false }) public angularCropper: CropperComponent;
-	
+
 	imgCrp = null;
 	config = {
 		dragMode: 'crop',
@@ -152,7 +152,7 @@ export class SearchComponent implements OnInit {
 		if (fileUp.files.length === 0) return;
 		console.log("processing");
 		this.processimg(fileOb);
-		
+
 		var mimeType = fileOb.type;
 		if (mimeType.match(/image\/*/) == null) {
 			alert('Only images are supported.');
@@ -188,27 +188,28 @@ export class SearchComponent implements OnInit {
 		this.angularCropper.cropper.scaleY(-val);
 	}
 
-	processimg(img)
-	{
+	processimg(img) {
 
-  
-		var apiurl=this.apiurl;
+
+		var apiurl = this.apiurl;
 		this.storage.ref('images').put(img).then(function (fileSnapshot) {
 			// 3 - Generate a public URL for the file.
 			return fileSnapshot.ref.getDownloadURL().then((url) => {
 				console.log(url);
 				console.log("upload-complete");
 				console.log("now recognizing");
-				fetch(apiurl+url).then(response=>response.json()).then(response=>console.log(response));
-				console.log("well done");
+				fetch(apiurl + url).then(response => response.json()).then(response => {
+					console.log(response); console.log("well done");
+
+				});
 			});
+			// 4 - Update the chat message placeholder with the image’s URL.
+
+			// $('#summe
+
+
 		});
-				// 4 - Update the chat message placeholder with the image’s URL.
-	
-				// $('#summe
-
-
-}
+	}
 	/// previous cropper code...
 	/*
 		@ViewChild('imageCropper',{ static: true })
