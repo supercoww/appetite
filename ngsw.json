@@ -1,0 +1,82 @@
+{
+  "configVersion": 1,
+  "timestamp": 1573906982294,
+  "index": "/index.html",
+  "assetGroups": [
+    {
+      "name": "app",
+      "installMode": "prefetch",
+      "updateMode": "prefetch",
+      "urls": [
+        "/favicon.ico",
+        "/index.html",
+        "/main-es2015.5e4ed72852c066247da7.js",
+        "/main-es5.5e4ed72852c066247da7.js",
+        "/manifest.webmanifest",
+        "/polyfills-es2015.2987770fde9daa1d8a2e.js",
+        "/polyfills-es5.ef4b1e1fc703b3ff76e3.js",
+        "/runtime-es2015.edb2fcf2778e7bf1d426.js",
+        "/runtime-es5.edb2fcf2778e7bf1d426.js",
+        "/styles.840174ec1cb9d683f79e.css"
+      ],
+      "patterns": []
+    },
+    {
+      "name": "assets",
+      "installMode": "prefetch",
+      "updateMode": "prefetch",
+      "urls": [
+        "/assets/icons/apple-touch-icon.png",
+        "/assets/icons/icon-128x128.png",
+        "/assets/icons/icon-144x144.png",
+        "/assets/icons/icon-152x152.png",
+        "/assets/icons/icon-192x192.png",
+        "/assets/icons/icon-384x384.png",
+        "/assets/icons/icon-512x512.png",
+        "/assets/icons/icon-72x72.png",
+        "/assets/icons/icon-96x96.png"
+      ],
+      "patterns": []
+    }
+  ],
+  "dataGroups": [],
+  "hashTable": {
+    "/assets/icons/apple-touch-icon.png": "05c765abdbbc96c15b981c4680859c15ba7914e7",
+    "/assets/icons/icon-128x128.png": "96d24a9700cd6c25cab4c674028932994c0fe09a",
+    "/assets/icons/icon-144x144.png": "1524e01931f626072175834643f963f3b1e860fd",
+    "/assets/icons/icon-152x152.png": "2307965a7c354f47d2f9cdfcb0f9702d73d0a2c6",
+    "/assets/icons/icon-192x192.png": "240b33e2036b510a9d8b09d2e8ea2419bd8adffc",
+    "/assets/icons/icon-384x384.png": "39cdc34bcfa57f99debae821ef8c219d8bde3ae2",
+    "/assets/icons/icon-512x512.png": "b6e16e26fd61c6e099899b22f0efc99a111b7566",
+    "/assets/icons/icon-72x72.png": "4b5c4aa50e789b0d7b74250e135a60c611a86590",
+    "/assets/icons/icon-96x96.png": "46b466131a031fde79b952e97f693c2329d8c3a2",
+    "/favicon.ico": "7f662fa858e28a9bdbef7f9a58ad48b079ded927",
+    "/index.html": "d099c311dea4e7633673328069d28c4e5021c4c1",
+    "/main-es2015.5e4ed72852c066247da7.js": "6ab1d2e040cf4dcc2425d81245f4aee564a24842",
+    "/main-es5.5e4ed72852c066247da7.js": "41395c3feb43f1e7d56f0f2ace8bebd2440ac3d3",
+    "/manifest.webmanifest": "8a9365a0a661c8f71a65cd85a1a1c6f0bb100b29",
+    "/polyfills-es2015.2987770fde9daa1d8a2e.js": "cf5cbfa9134716054fb479ab21362146cdf1f2ff",
+    "/polyfills-es5.ef4b1e1fc703b3ff76e3.js": "45c51483238468881240579c3fdecd19144cff17",
+    "/runtime-es2015.edb2fcf2778e7bf1d426.js": "a9aafcf49f49145093fc831efd9b8e2f6c71bb9c",
+    "/runtime-es5.edb2fcf2778e7bf1d426.js": "a9aafcf49f49145093fc831efd9b8e2f6c71bb9c",
+    "/styles.840174ec1cb9d683f79e.css": "766690fe1b74049812dfe6c24e5ada0770149c58"
+  },
+  "navigationUrls": [
+    {
+      "positive": true,
+      "regex": "^\\/.*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*\\.[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*\\/.*$"
+    }
+  ]
+}
