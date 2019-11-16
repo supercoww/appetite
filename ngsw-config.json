@@ -5,7 +5,6 @@
 		{
 			"name": "app",
 			"installMode": "prefetch",
-			"updateMode": "lazy",
 			"resources": {
 				"files": ["/favicon.ico", "/index.html", "/manifest.webmanifest", "/*.css", "/*.js"]
 			}
