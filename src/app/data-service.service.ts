@@ -8,7 +8,7 @@ import { checkServerIdentity } from 'tls';
  */
 class Filter
 {
-	filtername;
+	filtername:string;
 	min;
 	max;
 }
