@@ -4,6 +4,7 @@ import 'firebase/storage';
 import 'firebase/app';
 import { HistoryService } from 'src/app/history.service';
 import imageCompression from 'browser-image-compression';
+import { MatSnackBar } from '@angular/material';
 
 interface IWindow extends Window {
 	webkitSpeechRecognition: any;
@@ -24,8 +25,8 @@ export class SearchComponent implements OnInit {
 	apiurl = 'https://protected-mesa-37941.herokuapp.com/?url=';
 	@ViewChild('searchInput', { static: true }) searchInput: MatInput;
 	// tslint:disable-next-line: variable-name
-	//imageChangedEvent: any = '';
-	//croppedImage: any = '';
+	// imageChangedEvent: any = '';
+	// croppedImage: any = '';
 	public imgUrl: any = '';
 	public cropperHidden = true;
 
@@ -44,7 +45,11 @@ export class SearchComponent implements OnInit {
 
 	speechRecognition: SpeechRecognition;
 
-	constructor(private ref: ChangeDetectorRef, private historyService: HistoryService) {
+	constructor(
+		private ref: ChangeDetectorRef,
+		private historyService: HistoryService,
+		private snackbar: MatSnackBar
+	) {
 		this.speechRecognition = new webkitSpeechRecognition();
 		this.speechRecognition.interimResults = true;
 
@@ -155,11 +160,11 @@ export class SearchComponent implements OnInit {
 
 		var mimeType = fileOb.type; // only images checks..
 		if (mimeType.match(/image\/*/) == null) {
-			alert('Only images are supported.');
+			this.showError('Only images are supported');
 			return;
 		}
 		if (fileOb.size > 5000000) {
-			alert('file too large');
+			this.showError('File too large');
 			return;
 		}
 		var need = true;
@@ -198,6 +203,11 @@ export class SearchComponent implements OnInit {
 	}
 */
 	processimg(img) {
+		if (img.size > 5000000) {
+			this.showError('File too large');
+			return;
+		}
+
 		var apiurl = this.apiurl;
 		var self = this;
 		this.storage
@@ -205,24 +215,31 @@ export class SearchComponent implements OnInit {
 			.put(img)
 			.then(fileSnapshot => {
 				// 3 - Generate a public URL for the file.
-				return fileSnapshot.ref.getDownloadURL().then(url => {
-					console.log(url);
-					console.log('upload-complete');
-					console.log('now recognizing');
-					fetch(apiurl + url)
-						.then(response => response.json())
-						.then(response => {
-							console.log(response);
-							console.log('well done');
-							this.loaderEvent.emit(false);
-							if (response.status == 1) self.searchString = self.formatQuery(response.text);
-							else alert('Error in Text Recognition');
-						});
-				});
+				return fileSnapshot.ref
+					.getDownloadURL()
+					.then(url => {
+						console.log(url);
+						console.log('upload-complete');
+						console.log('now recognizing');
+						fetch(apiurl + url)
+							.then(response => response.json())
+							.then(response => {
+								console.log(response);
+								console.log('well done');
+								this.loaderEvent.emit(false);
+								if (response.status == 1) {
+									self.searchString = self.formatQuery(response.text);
+								} else {
+									this.showError('Could not recognize text');
+								}
+							});
+					})
+					.catch(error => this.showError('Error uploading image'));
 				// 4 - Update the chat message placeholder with the image’s URL.
 
 				// $('#summe
-			});
+			})
+			.catch(error => this.showError('Error uploading image'));
 	}
 
 	compressimg(img, need) {
@@ -246,5 +263,10 @@ export class SearchComponent implements OnInit {
 			console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`); // smaller than maxSizeMB
 			self.processimg(compressedFile);
 		});
+	}
+
+	showError(message: string) {
+		this.snackbar.open(message, '', { duration: 2000 });
+		this.loaderEvent.emit(false);
 	}
 }
