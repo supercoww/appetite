@@ -15,20 +15,32 @@ export class HomeComponent implements OnInit {
 
 	ngOnInit() {}
 
-	onSearch($event) {
-		this.searchString = $event;
+	/**
+	 * Responds to search event from search component
+	 * @param searchString s
+	 */
+	onSearch(searchString) {
+		this.searchString = searchString;
 		this.searchResults = this.getSearchResults();
 	}
 
+	/**
+	 * Hide/unhide loader.
+	 * @param value Use true to make loader visible. Use False to hide the loader.
+	 */
 	updateLoader(value: boolean) {
 		this.resultLoading = value;
+		if (value) {
+			this.searchResults = undefined;
+		}
 	}
 
-	// TODO: pass filter and sort data
+	/**
+	 * Returns an Observable for search results received from data service.
+	 */
 	getSearchResults() {
 		this.resultLoading = true;
 		const results$ = this.dataService.fetchresults(this.searchString);
-		results$.subscribe(() => this.updateLoader(false));
 		return results$;
 	}
 }
