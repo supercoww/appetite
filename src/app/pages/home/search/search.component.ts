@@ -117,7 +117,6 @@ export class SearchComponent implements OnInit {
 	 */
 	clickRealImgBtn() {
 		document.getElementById('realImageUpload').click();
-		this.loaderEvent.emit(true);
 	}
 	/**
 	 * This method formats the recognized text to replace new lines with spaces
@@ -130,6 +129,8 @@ export class SearchComponent implements OnInit {
 	 * Runs checks on the image uploaded.
 	 */
 	imgPreview() {
+		this.loaderEvent.emit(true);
+
 		this.cropperHidden = false;
 		const fileUp = document.getElementById('realImageUpload') as HTMLInputElement;
 		const fileOb = fileUp.files[0];
