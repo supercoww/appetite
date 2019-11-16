@@ -8,15 +8,15 @@ import { checkServerIdentity } from 'tls';
  */
 class Filter
 {
-	filtername;
+	filtername:string;
 	min;
 	max;
 }
 
 class Query {
-	text;
-	sort;
-	filters;
+	text:string;
+	sort:string;
+	filters:Array<Filter>;
 
 	constructor(text, sort, filters) {
 		this.text = text;
@@ -77,9 +77,9 @@ export class DataServiceService {
 	 * @returns {Array} The result array
 	 */
 	fetchresults(text:String) {
-		console.log(this.doesMatch);
+		//console.log(this.doesMatch);
 		var query = new Query(text, this.sort, this.filters);
-		console.log(this.doesMatch("hello world","world is a shitty place"));
+		//console.log(this.doesMatch("hello world","world is a shitty place"));
 		//=this.http.get('?order=desc&sort=activity&q='+query);
 		var suf = this.apiurl + this.parsequery(query);
 		var responses = [];
@@ -133,7 +133,7 @@ export class DataServiceService {
 	 */
 	sortcombineresult(results:Array<any>, query:Query) {
 		var sortval;
-		console.log(query);
+		//console.log(query);
 		if (query.sort) {
 			sortval = query.sort;
 		} 
@@ -199,8 +199,8 @@ export class DataServiceService {
 				else if(ele[name]==false)return true;
 				else return false;
 			}
-			console.log(name, ele[name]);
-			console.log(element.min, element.max);
+			//console.log(name, ele[name]);
+			//console.log(element.min, element.max);
 			//console.log(element.filtername,element.min,element.max,ele.name);
 			if (element.min) {
 				if (ele[name] >= element.min) {
