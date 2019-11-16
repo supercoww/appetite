@@ -1,12 +1,12 @@
 {
   "configVersion": 1,
-  "timestamp": 1573907442223,
+  "timestamp": 1573909769906,
   "index": "/index.html",
   "assetGroups": [
     {
       "name": "app",
       "installMode": "prefetch",
-      "updateMode": "prefetch",
+      "updateMode": "lazy",
       "urls": [
         "/favicon.ico",
         "/index.html",
