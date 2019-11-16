@@ -14,9 +14,9 @@ class Filter
 }
 
 class Query {
-	text;
-	sort;
-	filters;
+	text:string;
+	sort:string;
+	filters:Array<Filter>;
 
 	constructor(text, sort, filters) {
 		this.text = text;
