@@ -152,7 +152,7 @@ export class SearchComponent implements OnInit {
 		if (fileUp.files.length === 0) return;
 		console.log("processing");
 		this.processimg(fileOb);
-		console.log("processing complete");
+		
 		var mimeType = fileOb.type;
 		if (mimeType.match(/image\/*/) == null) {
 			alert('Only images are supported.');
@@ -197,8 +197,10 @@ export class SearchComponent implements OnInit {
 			// 3 - Generate a public URL for the file.
 			return fileSnapshot.ref.getDownloadURL().then((url) => {
 				console.log(url);
+				console.log("upload-complete");
+				console.log("now recognizing");
 				fetch(apiurl+url).then(response=>response.json()).then(response=>console.log(response));
-
+				console.log("well done");
 			});
 		});
 				// 4 - Update the chat message placeholder with the image’s URL.
