@@ -1,6 +1,7 @@
 # StackSearch
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.18.
+A PWA app that allows user to search on StackExchange using Voice,Image and Text inputs
+See the app in action at https://stacksearch-4646c.firebaseapp.com
 
 ## Development server
 
@@ -12,7 +13,7 @@ Run `ng generate component component-name` to generate a new component. You can 
 
 ## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+Run `ng build:prod` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
 
 ## Running unit tests
 
