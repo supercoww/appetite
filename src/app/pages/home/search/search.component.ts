@@ -2,7 +2,8 @@ import { Component, OnInit, Output, EventEmitter, ViewChild, ChangeDetectorRef }
 import { MatInput } from '@angular/material/input';
 import * as Tesseract from 'tesseract.js';
 import { ImageCroppedEvent, ImageCropperComponent } from 'ngx-image-cropper';
-
+import  "firebase/storage";
+import "firebase/app";
 import { CropperComponent } from 'angular-cropperjs';
 
 interface IWindow extends Window {
@@ -17,6 +18,9 @@ const { webkitSpeechRecognition }: IWindow = (window as any) as IWindow;
 	styleUrls: ['./search.component.scss']
 })
 export class SearchComponent implements OnInit {
+	storage=null;
+	firebase=require('firebase/app');
+	apiurl="https://protected-mesa-37941.herokuapp.com/?url="
 	@ViewChild('searchInput', { static: true }) searchInput: MatInput;
 	// tslint:disable-next-line: variable-name
 	//imageChangedEvent: any = '';
@@ -58,11 +62,27 @@ export class SearchComponent implements OnInit {
 		};
 
 		this.speechRecognition.lang = 'en-US';
+		
 	}
 
 	@Output() searchEvent = new EventEmitter<string>();
 
-	ngOnInit() {}
+	ngOnInit() {
+		var config = {
+			apiKey: "AIzaSyBd6vTCGgYOg9jjBJ7gV4X-4XA7p8crWUg",
+			authDomain: "stacksearch-4646c.firebaseapp.com",
+			databaseURL: "https://stacksearch-4646c.firebaseio.com",
+			projectId: "stacksearch-4646c",
+			storageBucket: "stacksearch-4646c.appspot.com",
+			messagingSenderId: "845252858351",
+			appId: "1:845252858351:web:dd36c674d91bc093a1261a"
+						};
+				this.firebase.initializeApp(config);
+				this.storage = this.firebase.storage();
+
+
+
+	}
 
 	triggerSearch() {
 		this.searchEvent.emit(this.searchString);
@@ -83,7 +103,7 @@ export class SearchComponent implements OnInit {
 	}
 
 	imageUpload() {
-		this.cropperHidden = true;
+		/*this.cropperHidden = true;
 		alert('imageupload');
 		Tesseract.recognize(this.imgUrl, 'eng', {
 			logger: m => {
@@ -98,7 +118,7 @@ export class SearchComponent implements OnInit {
 			var imgQuery = this.formatQuery(text);
 			this.searchString = imgQuery;
 			alert(imgQuery);
-		});
+		});*/
 	}
 
 	formatQuery(text) {
@@ -127,7 +147,9 @@ export class SearchComponent implements OnInit {
 		const fileUp = document.getElementById('realImageUpload') as HTMLInputElement;
 		const fileOb = fileUp.files[0];
 		if (fileUp.files.length === 0) return;
-
+		console.log("processing");
+		this.processimg(fileOb);
+		console.log("processing complete");
 		var mimeType = fileOb.type;
 		if (mimeType.match(/image\/*/) == null) {
 			alert('Only images are supported.');
@@ -161,6 +183,26 @@ export class SearchComponent implements OnInit {
 		var val = this.angularCropper.cropper.getData().scaleY;
 		this.angularCropper.cropper.scaleY(-val);
 	}
+
+	processimg(img)
+	{
+
+  
+		var apiurl=this.apiurl;
+		this.storage.ref('images').put(img).then(function (fileSnapshot) {
+			// 3 - Generate a public URL for the file.
+			return fileSnapshot.ref.getDownloadURL().then((url) => {
+				console.log(url);
+				fetch(apiurl+url).then(response=>response.json()).then(response=>console.log(response));
+
+			});
+		});
+				// 4 - Update the chat message placeholder with the image’s URL.
+	
+				// $('#summe
+
+
+}
 	/// previous cropper code...
 	/*
 		@ViewChild('imageCropper',{ static: true })
