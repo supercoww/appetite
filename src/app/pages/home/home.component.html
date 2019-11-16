@@ -1,2 +1,2 @@
 <app-search (searchEvent)="onSearch($event)"></app-search>
-<app-results [searchResults$]="searchResults"></app-results>
+<app-results [loading]="resultLoading" [searchResults$]="searchResults"></app-results>

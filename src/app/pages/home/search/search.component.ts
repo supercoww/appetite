@@ -103,9 +103,9 @@ export class SearchComponent implements OnInit {
 	clickRealImgBtn() {
 		document.getElementById('realImageUpload').click();
 	}
-
+/* Tesseract Code ....
 	imageUpload() {
-		/*this.cropperHidden = true;
+		this.cropperHidden = true;
 		alert('imageupload');
 		Tesseract.recognize(this.imgUrl, 'eng', {
 			logger: m => {
@@ -120,13 +120,13 @@ export class SearchComponent implements OnInit {
 			var imgQuery = this.formatQuery(text);
 			this.searchString = imgQuery;
 			alert(imgQuery);
-		});*/
+		});
 	}
-
+*/
 	formatQuery(text) {
 		return text.replace(/(\r\n|\n|\r)/gm, ' '); // replacing newlines with space
 	}
-	//////// Cropper code...
+/*	//////// Cropper code...
 	@ViewChild('angularCropper', { static: false }) public angularCropper: CropperComponent;
 
 	imgCrp = null;
@@ -144,28 +144,37 @@ export class SearchComponent implements OnInit {
 		checkCrossOrigin: true
 	};
 
-	previewURL: any;
+	previewURL: any; 
+	
+*/
 	imgPreview() {
 		this.cropperHidden = false;
 		const fileUp = document.getElementById('realImageUpload') as HTMLInputElement;
 		const fileOb = fileUp.files[0];
+		console.log(fileOb);
 		if (fileUp.files.length === 0) return;
-		console.log("processing");
-		this.processimg(fileOb);
 
-		var mimeType = fileOb.type;
+		var mimeType = fileOb.type;   // only images checks..
 		if (mimeType.match(/image\/*/) == null) {
 			alert('Only images are supported.');
 			return;
 		}
+		if(fileOb.size > 5000000) {
+			alert("file too large");
+			return;
+		}
 
-		var reader = new FileReader();
+		console.log("processing");
+		this.processimg(fileOb);
+
+	/*	var reader = new FileReader();
 		reader.readAsDataURL(fileOb);
 		reader.onload = _event => {
 			this.previewURL = reader.result;
-		};
+		}; 
+	*/
 	}
-
+/*
 	cropMoved(data) {
 		this.imgUrl = this.angularCropper.cropper.getCroppedCanvas().toDataURL();
 	}
@@ -187,11 +196,11 @@ export class SearchComponent implements OnInit {
 		var val = this.angularCropper.cropper.getData().scaleY;
 		this.angularCropper.cropper.scaleY(-val);
 	}
-
+*/
 	processimg(img) {
 
-
 		var apiurl = this.apiurl;
+		var self = this;
 		this.storage.ref('images').put(img).then(function (fileSnapshot) {
 			// 3 - Generate a public URL for the file.
 			return fileSnapshot.ref.getDownloadURL().then((url) => {
@@ -200,7 +209,10 @@ export class SearchComponent implements OnInit {
 				console.log("now recognizing");
 				fetch(apiurl + url).then(response => response.json()).then(response => {
 					console.log(response); console.log("well done");
-
+					if(response.status==1)
+						self.searchString = self.formatQuery(response.text);
+					else
+						alert("Error in Text Recognition");
 				});
 			});
 			// 4 - Update the chat message placeholder with the image’s URL.
@@ -210,36 +222,4 @@ export class SearchComponent implements OnInit {
 
 		});
 	}
-	/// previous cropper code...
-	/*
-		@ViewChild('imageCropper',{ static: true })
-		imageCropper: ImageCropperComponent;
-
-		fileChangeEvent(event: any): void {
-			this.imageChangedEvent = event;
-			this.cropperHidden=false;
-			console.log("filechangeeevtn");
-		}
-		imageCropped(event: ImageCroppedEvent) {
-			this.croppedImage = event.base64;
-			this.imgUrl = this.croppedImage; // passing to recognise
-			//console.log(this.imgUrl);
-		}
-		crop()
-		{
-			this.imageUpload();
-		}
-		left()
-		{
-			this.imageCropper.rotateLeft();
-		}
-		right()
-		{
-			this.imageCropper.rotateRight();
-		}
-		flip()
-		{
-			this.imageCropper.flipHorizontal();
-		}
-		*/
 }
