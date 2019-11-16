@@ -5,6 +5,14 @@ See the app in action at https://stacksearch-4646c.firebaseapp.com
 
 Documentation: https://supercoww.github.io/appetite/
 
+## Features
+
+-   Text Search
+-   Voice Search
+-   Image Search
+-   Search History
+-   Automatic Dark Mode
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
