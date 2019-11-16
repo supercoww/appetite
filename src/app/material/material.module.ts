@@ -13,6 +13,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material';
 import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
 	declarations: [],
@@ -29,7 +30,8 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 		MatDatepickerModule,
 		MatNativeDateModule,
 		MatListModule,
-		MatSidenavModule
+		MatSidenavModule,
+		MatProgressSpinnerModule
 	],
 	exports: [
 		MatToolbarModule,
@@ -44,7 +46,8 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 		MatDatepickerModule,
 		MatNativeDateModule,
 		MatListModule,
-		MatSidenavModule
+		MatSidenavModule,
+		MatProgressSpinnerModule
 	]
 })
 export class MaterialModule {}
