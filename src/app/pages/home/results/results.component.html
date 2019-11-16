@@ -1,41 +1,43 @@
 <div #results>
 	<div *ngIf="searchResults$ | async as searchResults; else loader">
-		<div *ngFor="let result of searchResults">
-			<a [href]="result.link" target="_blank" rel="noopener" class="card-link">
-				<mat-card matRipple class="result-card">
-					<mat-card-header>
-						<div mat-card-avatar *ngIf="result.owner.profile_image">
-							<img class="avatar" [src]="result.owner.profile_image" />
-						</div>
-						<mat-card-title>{{ result.title }}</mat-card-title>
-						<mat-card-subtitle
-							>{{ result.owner.display_name }}<br />
-							Last Activity: {{ result.last_activity_date | date }}
-						</mat-card-subtitle>
-						<div class="date">{{ result.creation_date | date }}</div>
-					</mat-card-header>
-					<mat-card-content>
-						<div class="numbers">
-							<div>
-								<span class="num">{{ result.score | number }}</span> <br />
-								Score
+		<ng-container *ngIf="searchResults.length > 0; else emptyMessage">
+			<div *ngFor="let result of searchResults">
+				<a [href]="result.link" target="_blank" rel="noopener" class="card-link">
+					<mat-card matRipple class="result-card">
+						<mat-card-header>
+							<div mat-card-avatar *ngIf="result.owner.profile_image">
+								<img class="avatar" [src]="result.owner.profile_image" />
 							</div>
-							<div>
-								<div [ngClass]="{ 'no-ans': result.is_answered }">
-									<span class="num">{{ result.answer_count | number }}</span>
-									<br />
-									Answers
+							<mat-card-title>{{ result.title }}</mat-card-title>
+							<mat-card-subtitle
+								>{{ result.owner.display_name }}<br />
+								Last Activity: {{ result.last_activity_date | date }}
+							</mat-card-subtitle>
+							<div class="date">{{ result.creation_date | date }}</div>
+						</mat-card-header>
+						<mat-card-content>
+							<div class="numbers">
+								<div>
+									<span class="num">{{ result.score | number }}</span> <br />
+									Score
+								</div>
+								<div>
+									<div [ngClass]="{ 'no-ans': result.is_answered }">
+										<span class="num">{{ result.answer_count | number }}</span>
+										<br />
+										Answers
+									</div>
+								</div>
+								<div>
+									<span class="num">{{ result.view_count | number }}</span> <br />
+									Views
 								</div>
 							</div>
-							<div>
-								<span class="num">{{ result.view_count | number }}</span> <br />
-								Views
-							</div>
-						</div>
-					</mat-card-content>
-				</mat-card>
-			</a>
-		</div>
+						</mat-card-content>
+					</mat-card>
+				</a>
+			</div>
+		</ng-container>
 	</div>
 </div>
 
@@ -49,5 +51,11 @@
 	<div class="center">
 		<mat-icon class="large">search</mat-icon> <br />
 		Search to see results
+	</div>
+</ng-template>
+
+<ng-template #emptyMessage>
+	<div class="center">
+		No results found
 	</div>
 </ng-template>
