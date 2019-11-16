@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { HistoryService } from 'src/app/history.service';
 
+/**
+ * Component for displaying user history
+ */
 @Component({
 	selector: 'app-history',
 	templateUrl: './history.component.html',

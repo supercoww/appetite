@@ -2,6 +2,10 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { availableFilters, availableSorts } from './available-options';
 import { IFilter } from 'src/interfaces';
 import { DataServiceService } from 'src/app/data-service.service';
+
+/**
+ * This component provides interface for changing the filter and sort options
+ */
 @Component({
 	selector: 'app-filters',
 	templateUrl: './filters.component.html',
@@ -29,6 +33,9 @@ export class FiltersComponent implements OnInit {
 
 	ngOnInit() {}
 
+	/**
+	 * Stores the filter and sort configuration in dataService
+	 */
 	saveFilters() {
 		// convert date objects  to epoch time
 		this.filters.forEach(filter => {

@@ -12,6 +12,9 @@ interface IWindow extends Window {
 
 const { webkitSpeechRecognition }: IWindow = (window as any) as IWindow;
 
+/**
+ * Provides search UI with voice, text and image input
+ */
 @Component({
 	selector: 'app-search',
 	templateUrl: './search.component.html',
@@ -88,16 +91,25 @@ export class SearchComponent implements OnInit {
 		this.storage = this.firebase.storage();
 	}
 
+	/**
+	 * Emit event for search and add string to history.
+	 */
 	triggerSearch() {
 		this.searchEvent.emit(this.searchString);
 		this.historyService.addHistory(this.searchString);
 	}
 
+	/**
+	 * Start listening to voice input
+	 */
 	startListening() {
 		this.speechRecognition.start();
 		this.voiceButtonColor = 'accent';
 	}
 
+	/**
+	 * Stop listening to voice input
+	 */
 	stopListening() {
 		this.voiceButtonColor = '';
 		this.ref.detectChanges();
@@ -151,9 +163,9 @@ export class SearchComponent implements OnInit {
 	previewURL: any;
 
 */
-/**
- * Runs checks on the image uploaded.
- */
+	/**
+	 * Runs checks on the image uploaded.
+	 */
 	imgPreview() {
 		this.cropperHidden = false;
 		const fileUp = document.getElementById('realImageUpload') as HTMLInputElement;
@@ -166,7 +178,7 @@ export class SearchComponent implements OnInit {
 			this.showError('Only images are supported');
 			return;
 		}
-	
+
 		var need = true;
 		if (fileOb.size < this.minsizetocompress) need = false;
 		console.log('processing');
@@ -202,10 +214,10 @@ export class SearchComponent implements OnInit {
 		this.angularCropper.cropper.scaleY(-val);
 	}
 */
-/**
- * Processes the image and binds the recognized text with the Search string
- * @param img 
- */
+	/**
+	 * Processes the image and binds the recognized text with the Search string
+	 * @param img Image file to be processed
+	 */
 	processimg(img) {
 		if (img.size > 5000000) {
 			this.showError('File too large');
@@ -247,10 +259,10 @@ export class SearchComponent implements OnInit {
 	}
 	/**
 	 * Compressed the image if needed anda calls the processimg function for recognizing text
-	 * @param {File} img 
+	 * @param {File} img Image file to be compressed
 	 * @param {boolean} need Do we need to compress the image ,true or false
 	 */
-	compressimg(img, need:boolean) {
+	compressimg(img, need: boolean) {
 		if (this.compress == false || need == false) {
 			this.processimg(img);
 			return;
@@ -273,6 +285,10 @@ export class SearchComponent implements OnInit {
 		});
 	}
 
+	/**
+	 * Display a error message in snackbar. Also hides the loader if visible
+	 * @param message Message to be displayed
+	 */
 	showError(message: string) {
 		this.snackbar.open(message, '', { duration: 2000 });
 		this.loaderEvent.emit(false);
