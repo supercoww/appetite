@@ -21,6 +21,7 @@ const { webkitSpeechRecognition }: IWindow = (window as any) as IWindow;
 export class SearchComponent implements OnInit {
 	compress=true;
 	minsizetocompress=1000000;
+	maxfilesize=5000000;
 	storage = null;
 	firebase = require('firebase/app');
 	apiurl = 'https://protected-mesa-37941.herokuapp.com/?url=';
@@ -148,6 +149,9 @@ export class SearchComponent implements OnInit {
 	previewURL: any;
 
 */
+/**
+ * Runs checks on the image uploaded.
+ */
 	imgPreview() {
 		this.cropperHidden = false;
 		const fileUp = document.getElementById('realImageUpload') as HTMLInputElement;
@@ -160,10 +164,7 @@ export class SearchComponent implements OnInit {
 			alert('Only images are supported.');
 			return;
 		}
-		if (fileOb.size > 5000000) {
-			alert('file too large');
-			return;
-		}
+	
 		var need=true;
 		if(fileOb.size<this.minsizetocompress)need=false;
 		console.log('processing');
@@ -199,7 +200,15 @@ export class SearchComponent implements OnInit {
 		this.angularCropper.cropper.scaleY(-val);
 	}
 */
-	processimg(img) {
+/**
+ * Processes the image and binds the recognized text with the Search string
+ * @param img 
+ */
+processimg(img) {
+		if (img.size > this.maxfilesize) {
+			alert('file too large');
+			return;
+		}
 		var apiurl = this.apiurl;
 		var self = this;
 		this.storage
@@ -226,7 +235,11 @@ export class SearchComponent implements OnInit {
 				// $('#summe
 			});
 	}
-
+	/**
+	 * Compressed the image if needed anda calls the processimg function for recognizing text
+	 * @param {File} img 
+	 * @param {boolean} need Do we need to compress the image ,true or false
+	 */
 	compressimg(img,need)
 	{
 		if(this.compress==false || need==false)

@@ -20,6 +20,9 @@ class Query {
 @Injectable({
 	providedIn: 'root'
 })
+/**
+ * This service interacts with Stack Exchange api and provides results to the frontend
+ */
 export class DataServiceService {
 	/*
 		Prototype for Query Object
@@ -51,12 +54,20 @@ export class DataServiceService {
 	sort = null;
 	doesMatch=require('does-match');
 	constructor(private http: HttpClient) {}
-
+	/**
+	 * 
+	 * @param {String} sort - The type of sort,Available sort type defined in availabesorts array
+	 * @param filters -The filter object,Consists of a filtername,min and max values
+	 */
 	setparams(sort = null, filters = null) {
 		this.sort = sort;
 		this.filters = filters;
 	}
-
+	/**
+	 * The main function that calls the sort and filter functions and returns the final results
+	 * @param {String} text  The query string
+	 * @returns {Array} The result array
+	 */
 	fetchresults(text) {
 		console.log(this.doesMatch);
 		var query = new Query(text, this.sort, this.filters);
@@ -86,6 +97,11 @@ export class DataServiceService {
 
 		return results;
 	}
+	/**
+	 * Filters the fetched results according to the filters provided in this.filters
+	 * @param {Array} results 
+	 * @param {Query} query 
+	 */
 	filterresult(results, query) {
 		var filteredresults = [];
 		if (!query.filters) {
@@ -102,6 +118,11 @@ export class DataServiceService {
 		});
 		return filteredresults;
 	}
+	/**
+	 * Combines the result from various sites and sorts them up by the given sort,If no sort is provided then its is sorted by relevance
+	 * @param {Array} results 
+	 * @param {Query} query 
+	 */
 	sortcombineresult(results, query) {
 		var sortval;
 		console.log(query);
@@ -146,6 +167,13 @@ export class DataServiceService {
 		suf = suf + '&sort=relevance';
 		return suf;
 	}
+
+	/**
+	 * Checks if a given element satisfies the condition provided by filters
+	 * @param ele 
+	 * @param filters 
+	 * @returns {boolean} true or false
+	 */
 
 	check(ele, filters) {
 		var flag = true;
