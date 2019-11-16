@@ -17,6 +17,8 @@ import { ImageCropperModule } from 'ngx-image-cropper';
 
 import { AngularCropperjsModule } from 'angular-cropperjs';
 import { HistoryComponent } from './pages/history/history.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 @NgModule({
 	declarations: [
@@ -36,7 +38,8 @@ import { HistoryComponent } from './pages/history/history.component';
 		FormsModule,
 		ImageCropperModule,
 		HttpClientModule,
-		AngularCropperjsModule
+		AngularCropperjsModule,
+		ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
 	],
 
 	providers: [],
