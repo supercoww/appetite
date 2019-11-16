@@ -2,8 +2,8 @@ import { Component, OnInit, Output, EventEmitter, ViewChild, ChangeDetectorRef }
 import { MatInput } from '@angular/material/input';
 import * as Tesseract from 'tesseract.js';
 import { ImageCroppedEvent, ImageCropperComponent } from 'ngx-image-cropper';
-import "firebase/storage";
-import "firebase/app";
+import 'firebase/storage';
+import 'firebase/app';
 import { CropperComponent } from 'angular-cropperjs';
 import { HistoryService } from 'src/app/history.service';
 
@@ -21,13 +21,15 @@ const { webkitSpeechRecognition }: IWindow = (window as any) as IWindow;
 export class SearchComponent implements OnInit {
 	storage = null;
 	firebase = require('firebase/app');
-	apiurl = "https://protected-mesa-37941.herokuapp.com/?url="
+	apiurl = 'https://protected-mesa-37941.herokuapp.com/?url=';
 	@ViewChild('searchInput', { static: true }) searchInput: MatInput;
 	// tslint:disable-next-line: variable-name
 	//imageChangedEvent: any = '';
 	//croppedImage: any = '';
 	public imgUrl: any = '';
 	public cropperHidden = true;
+
+	@Output() loaderEvent: EventEmitter<boolean> = new EventEmitter();
 
 	private _searchString = '';
 	voiceButtonColor = '';
@@ -63,26 +65,22 @@ export class SearchComponent implements OnInit {
 		};
 
 		this.speechRecognition.lang = 'en-US';
-
 	}
 
 	@Output() searchEvent = new EventEmitter<string>();
 
 	ngOnInit() {
 		var config = {
-			apiKey: "AIzaSyBd6vTCGgYOg9jjBJ7gV4X-4XA7p8crWUg",
-			authDomain: "stacksearch-4646c.firebaseapp.com",
-			databaseURL: "https://stacksearch-4646c.firebaseio.com",
-			projectId: "stacksearch-4646c",
-			storageBucket: "stacksearch-4646c.appspot.com",
-			messagingSenderId: "845252858351",
-			appId: "1:845252858351:web:dd36c674d91bc093a1261a"
+			apiKey: 'AIzaSyBd6vTCGgYOg9jjBJ7gV4X-4XA7p8crWUg',
+			authDomain: 'stacksearch-4646c.firebaseapp.com',
+			databaseURL: 'https://stacksearch-4646c.firebaseio.com',
+			projectId: 'stacksearch-4646c',
+			storageBucket: 'stacksearch-4646c.appspot.com',
+			messagingSenderId: '845252858351',
+			appId: '1:845252858351:web:dd36c674d91bc093a1261a'
 		};
 		this.firebase.initializeApp(config);
 		this.storage = this.firebase.storage();
-
-
-
 	}
 
 	triggerSearch() {
@@ -102,8 +100,9 @@ export class SearchComponent implements OnInit {
 
 	clickRealImgBtn() {
 		document.getElementById('realImageUpload').click();
+		this.loaderEvent.emit(true);
 	}
-/* Tesseract Code ....
+	/* Tesseract Code ....
 	imageUpload() {
 		this.cropperHidden = true;
 		alert('imageupload');
@@ -126,7 +125,7 @@ export class SearchComponent implements OnInit {
 	formatQuery(text) {
 		return text.replace(/(\r\n|\n|\r)/gm, ' '); // replacing newlines with space
 	}
-/*	//////// Cropper code...
+	/*	//////// Cropper code...
 	@ViewChild('angularCropper', { static: false }) public angularCropper: CropperComponent;
 
 	imgCrp = null;
@@ -144,8 +143,8 @@ export class SearchComponent implements OnInit {
 		checkCrossOrigin: true
 	};
 
-	previewURL: any; 
-	
+	previewURL: any;
+
 */
 	imgPreview() {
 		this.cropperHidden = false;
@@ -154,27 +153,27 @@ export class SearchComponent implements OnInit {
 		console.log(fileOb);
 		if (fileUp.files.length === 0) return;
 
-		var mimeType = fileOb.type;   // only images checks..
+		var mimeType = fileOb.type; // only images checks..
 		if (mimeType.match(/image\/*/) == null) {
 			alert('Only images are supported.');
 			return;
 		}
-		if(fileOb.size > 5000000) {
-			alert("file too large");
+		if (fileOb.size > 5000000) {
+			alert('file too large');
 			return;
 		}
 
-		console.log("processing");
+		console.log('processing');
 		this.processimg(fileOb);
 
-	/*	var reader = new FileReader();
+		/*	var reader = new FileReader();
 		reader.readAsDataURL(fileOb);
 		reader.onload = _event => {
 			this.previewURL = reader.result;
-		}; 
+		};
 	*/
 	}
-/*
+	/*
 	cropMoved(data) {
 		this.imgUrl = this.angularCropper.cropper.getCroppedCanvas().toDataURL();
 	}
@@ -198,28 +197,30 @@ export class SearchComponent implements OnInit {
 	}
 */
 	processimg(img) {
-
 		var apiurl = this.apiurl;
 		var self = this;
-		this.storage.ref('images').put(img).then(function (fileSnapshot) {
-			// 3 - Generate a public URL for the file.
-			return fileSnapshot.ref.getDownloadURL().then((url) => {
-				console.log(url);
-				console.log("upload-complete");
-				console.log("now recognizing");
-				fetch(apiurl + url).then(response => response.json()).then(response => {
-					console.log(response); console.log("well done");
-					if(response.status==1)
-						self.searchString = self.formatQuery(response.text);
-					else
-						alert("Error in Text Recognition");
+		this.storage
+			.ref('images')
+			.put(img)
+			.then(fileSnapshot => {
+				// 3 - Generate a public URL for the file.
+				return fileSnapshot.ref.getDownloadURL().then(url => {
+					console.log(url);
+					console.log('upload-complete');
+					console.log('now recognizing');
+					fetch(apiurl + url)
+						.then(response => response.json())
+						.then(response => {
+							console.log(response);
+							console.log('well done');
+							this.loaderEvent.emit(false);
+							if (response.status == 1) self.searchString = self.formatQuery(response.text);
+							else alert('Error in Text Recognition');
+						});
 				});
+				// 4 - Update the chat message placeholder with the image’s URL.
+
+				// $('#summe
 			});
-			// 4 - Update the chat message placeholder with the image’s URL.
-
-			// $('#summe
-
-
-		});
 	}
 }

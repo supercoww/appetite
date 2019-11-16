@@ -20,6 +20,11 @@ export class HomeComponent implements OnInit {
 		this.searchResults = this.getSearchResults();
 	}
 
+	updateLoader(value: boolean) {
+		this.resultLoading = value;
+		console.log('loader: ' + value);
+	}
+
 	// TODO: pass filter and sort data
 	getSearchResults() {
 		this.resultLoading = true;
