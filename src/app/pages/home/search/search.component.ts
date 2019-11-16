@@ -6,7 +6,7 @@ import 'firebase/storage';
 import 'firebase/app';
 import { CropperComponent } from 'angular-cropperjs';
 import { HistoryService } from 'src/app/history.service';
-
+import imageCompression from 'browser-image-compression'
 interface IWindow extends Window {
 	webkitSpeechRecognition: any;
 }
@@ -19,6 +19,8 @@ const { webkitSpeechRecognition }: IWindow = (window as any) as IWindow;
 	styleUrls: ['./search.component.scss']
 })
 export class SearchComponent implements OnInit {
+	compress=true;
+	minsizetocompress=1000000;
 	storage = null;
 	firebase = require('firebase/app');
 	apiurl = 'https://protected-mesa-37941.herokuapp.com/?url=';
@@ -162,9 +164,10 @@ export class SearchComponent implements OnInit {
 			alert('file too large');
 			return;
 		}
-
+		var need=true;
+		if(fileOb.size<this.minsizetocompress)need=false;
 		console.log('processing');
-		this.processimg(fileOb);
+		this.compressimg(fileOb,need);
 
 		/*	var reader = new FileReader();
 		reader.readAsDataURL(fileOb);
@@ -223,4 +226,33 @@ export class SearchComponent implements OnInit {
 				// $('#summe
 			});
 	}
+
+	compressimg(img,need)
+	{
+		if(this.compress==false || need==false)
+		{
+			this.processimg(img);
+			return;
+		}
+		
+		var imageFile =img
+		console.log('originalFile instanceof Blob', imageFile instanceof Blob); // true
+		console.log(`originalFile size ${imageFile.size / 1024 / 1024} MB`);
+	   
+		var options = {
+		  maxSizeMB: 1,
+		  maxWidthOrHeight: 1920,
+		  useWebWorker: true
+		}
+		var self=this;
+		imageCompression(imageFile, options)
+		  .then(function (compressedFile) {
+			console.log('compressedFile instanceof Blob', compressedFile instanceof Blob); // true
+			console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`); // smaller than maxSizeMB
+			self.processimg(compressedFile);
+			
+		  });
+		  
+	}
 }
+
