@@ -1,5 +1,5 @@
-<ng-template #results>
-	<div *ngIf="searchResults$ | async as searchResults; else searchMessage">
+<div #results>
+	<div *ngIf="searchResults$ | async as searchResults; else loader">
 		<div *ngFor="let result of searchResults">
 			<a [href]="result.link" target="_blank" rel="noopener" class="card-link">
 				<mat-card matRipple class="result-card">
@@ -37,13 +37,13 @@
 			</a>
 		</div>
 	</div>
-</ng-template>
+</div>
 
-<div #loader>
-	<div class="center" *ngIf="loading; else results">
+<ng-template #loader>
+	<div class="center" *ngIf="loading; else searchMessage">
 		<mat-spinner [diameter]="70"></mat-spinner>
 	</div>
-</div>
+</ng-template>
 
 <ng-template #searchMessage>
 	<div class="center">
