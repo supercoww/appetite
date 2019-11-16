@@ -199,8 +199,8 @@ export class SearchComponent implements OnInit {
 */
 	processimg(img) {
 
-
 		var apiurl = this.apiurl;
+		var self = this;
 		this.storage.ref('images').put(img).then(function (fileSnapshot) {
 			// 3 - Generate a public URL for the file.
 			return fileSnapshot.ref.getDownloadURL().then((url) => {
@@ -209,7 +209,10 @@ export class SearchComponent implements OnInit {
 				console.log("now recognizing");
 				fetch(apiurl + url).then(response => response.json()).then(response => {
 					console.log(response); console.log("well done");
-
+					if(response.status==1)
+						self.searchString = self.formatQuery(response.text);
+					else
+						alert("Error in Text Recognition");
 				});
 			});
 			// 4 - Update the chat message placeholder with the image’s URL.
